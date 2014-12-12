@@ -13,12 +13,15 @@ function ICVGraph (container_id) {
   self._busy = false;
   self._preventNextClick = false;
 
+
   var labelType, useGradients, nativeTextSupport, animate,
     container = $('#' + self._container),
     theme = container.data('theme') || 'default';
 
   container.addClass('icv-theme-' + theme);
   self._generator = new ICVGenerator(theme);
+
+  self._stickBackgroundImage = self._generator.getConfig('stickBackgroundImage') || false;
 
   /** @constructs */
   (function () {
@@ -92,34 +95,8 @@ function ICVGraph (container_id) {
     //and a click handler to move the graph.
     //This method is called once, on label creation.
     onCreateLabel: function (domElement, node) {
-      /*type: 'framework',
-       experience: 5,
-       active: true,
-       years: 0.5,
-       desc: 'Chromium based cross-platform desktop applications using JavaScript, HTML and CSS.',
-       url: 'https://github.com/atom/atom-shell'*/
 
-      var expanded = !(node.data.relation || false);
-
-      if (expanded) {
-        var inlineExpansion = "<div class=\"inline-expansion\">",
-          expansion = "<div class=\"expansion\">";
-
-        inlineExpansion += '<span class="icv-experience icv-bar-' + parseInt(node.data.experience || '0') + '"></span>';
-        inlineExpansion += '<span class="icv-active">' + ((node.data.active || false) ? 'ACTIVE' : 'IN THE PAST') + '</span>';
-        inlineExpansion += '<span class="icv-years">' + (node.data.years || 0) + '</span>';
-
-        inlineExpansion += "</div>";
-
-        expansion += '<span class="icv-desc">' + (node.data.desc || '') + '</span>';
-
-        expansion += "</div>";
-
-        domElement.innerHTML = node.name + inlineExpansion + expansion;
-      } else {
-        domElement.innerHTML = node.name + "<div class=\"expansion\">" + node.data.relation + "</div>";
-      }
-
+      self.getGenerator().buildNodeElement(domElement, node);
 
       domElement.onclick = function (a, b, c) {
         if (self._preventNextClick) {
@@ -181,6 +158,23 @@ function ICVGraph (container_id) {
       var h = domElement.offsetHeight;
       style.left = (left - w / 2) + 'px';
       style.top = (top - h / 2) + 'px';
+    },
+    onBeforePlotLine: function(adj) {
+      if (self._stickBackgroundImage) {
+        var bg_w = 260, bg_h = 260, background_pos_x = 30, background_pos_y = 30;
+        var x = self.rgraph.canvas.translateOffsetX,
+          y = self.rgraph.canvas.translateOffsetY,
+          modScaleX = (((bg_w * self.rgraph.canvas.scaleOffsetX) * background_pos_x) / bg_w) - background_pos_x,
+          modScaleY = (((bg_h * self.rgraph.canvas.scaleOffsetY) * background_pos_y) / bg_h) - background_pos_y;
+
+        var canvas_size = self.rgraph.canvas.getSize();
+        var pos = '' + ((canvas_size.width / 2) + x + background_pos_x + modScaleX) + 'px ' + ((canvas_size.height / 2) + y + background_pos_y + modScaleY) + 'px';
+        var container = $('#'+self._container);
+
+        if (container.css('background-position') != pos) {
+          container.css('background-position', pos);
+        }
+      }
     }
   });
 }

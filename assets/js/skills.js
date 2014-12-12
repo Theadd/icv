@@ -44,7 +44,12 @@ var techs_json = {
         id: "2_2_1",
         name: "C++",
         data: {
-          relation: "<h4>...</h4>"
+          type: 'language',
+          experience: 3,
+          active: false,
+          years: 5,
+          desc: 'Nothing to say here.',
+          url: ''
         },
         children: [{
           id: "2_2_1_1",

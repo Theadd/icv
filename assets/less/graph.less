@@ -13,6 +13,7 @@
     //background-color: red;
     font-weight: bold;
     max-width: 200px;
+    font-size: 13px;
     font-family: Verdana;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -28,28 +29,47 @@
     .expansion {
       display: none;
       font-weight: normal;
+      font-size: 12px;
     }
 
     .inline-expansion {
       font-weight: normal;
       display: inline-block;
       margin-left: 10px;
-      background-color: blue;
+      position: absolute;
 
       .icv-experience {
 
-        width: 32px;
-        height: 32px;
+        width: 13px;
+        height: 13px;
         display: inline-block;
+        background-size: 13px;
+        background-repeat: no-repeat;
 
-        &.icv-bar-5 {
-          background-image: url("../img/bar4.png");
-        }
+        background-position: 3px;
+        background-color: rgba(255, 255, 255, 0.5);
+        position: relative;
+        top: 1px;
+        border-radius: 2px;
+        padding: 3px;
 
-        &.icv-bar-4 {
-          background-image: url("../img/bar3.png");
-        }
       }
+    }
+
+    &.icv-exp-5 .icv-experience {
+      background-image: url("../img/bar4.png");
+    }
+    &.icv-exp-4 .icv-experience {
+      background-image: url("../img/bar3.png");
+    }
+    &.icv-exp-3 .icv-experience {
+      background-image: url("../img/bar2.png");
+    }
+    &.icv-exp-2 .icv-experience {
+      background-image: url("../img/bar1.png");
+    }
+    &.icv-exp-1 .icv-experience {
+      background-image: url("../img/bar0.png");
     }
 
     &.open {
@@ -65,10 +85,57 @@
   //theme specific styles
 
   &.icv-theme-default {
-    background-color: #1c1d21;
+    //background-color: #1c1d21;
+    background-image: url("../img/bg.png");
 
     .node {
       font-family: 'Frijole', Verdana;
+      text-shadow: 2px 2px 2px black;
+
+      &.icv-exp-5 {
+        font-size: 20px;
+        .inline-expansion .icv-experience {
+          width: 20px;
+          height: 20px;
+          background-size: 20px;
+        }
+      }
+
+      &.icv-exp-4 {
+        font-size: 18px;
+        .inline-expansion .icv-experience {
+          width: 18px;
+          height: 18px;
+          background-size: 18px;
+        }
+      }
+
+      &.icv-exp-3 {
+        font-size: 16px;
+        .inline-expansion .icv-experience {
+          width: 16px;
+          height: 16px;
+          background-size: 16px;
+        }
+      }
+
+      &.icv-exp-2 {
+        font-size: 14px;
+        .inline-expansion .icv-experience {
+          width: 14px;
+          height: 14px;
+          background-size: 14px;
+        }
+      }
+
+      &.icv-exp-2 {
+        font-size: 12px;
+        .inline-expansion .icv-experience {
+          width: 12px;
+          height: 12px;
+          background-size: 12px;
+        }
+      }
 
       .expansion {
         font-family: Verdana;

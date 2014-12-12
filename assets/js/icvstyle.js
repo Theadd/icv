@@ -35,10 +35,16 @@ var ICVStyle = {
           normal: {
             color: '#784444'
           }
+        },
+        language: {
+          normal: {
+            color: '#784444'
+          }
         }
       },
       config: {
-        "backgroundColor": 'transparent'
+        "backgroundColor": 'transparent',
+        "stickBackgroundImage": true
       }
     }
   }

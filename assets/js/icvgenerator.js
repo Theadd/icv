@@ -8,8 +8,39 @@ function ICVGenerator (theme) {
   self._cache = {};
 }
 
-ICVGenerator.prototype.buildNodeHTML = function (node) {
+ICVGenerator.prototype.buildNodeElement = function (element, node) {
   var self = this;
+
+  /*type: 'framework',
+   experience: 5,
+   active: true,
+   years: 0.5,
+   desc: 'Chromium based cross-platform desktop applications using JavaScript, HTML and CSS.',
+   url: 'https://github.com/atom/atom-shell'*/
+
+  var expanded = !(node.data.relation || false);
+
+  if (expanded) {
+    var inlineExpansion = "<div class=\"inline-expansion\">",
+      expansion = "<div class=\"expansion\">",
+      experience = Math.max(Math.min(Math.round(parseInt(node.data.experience || '1')), 5), 1);
+
+    $(element).addClass('icv-exp-' + experience);
+
+    inlineExpansion += '<span class="icv-experience"></span>';
+    //inlineExpansion += '<span class="icv-active">' + ((node.data.active || false) ? 'ACTIVE' : 'IN THE PAST') + '</span>';
+    //inlineExpansion += '<span class="icv-years">' + (node.data.years || 0) + '</span>';
+
+    inlineExpansion += "</div>";
+
+    expansion += '<span class="icv-desc">' + (node.data.desc || '') + '</span>';
+
+    expansion += "</div>";
+
+    element.innerHTML = node.name + inlineExpansion + expansion;
+  } else {
+    element.innerHTML = node.name + "<div class=\"expansion\">" + node.data.relation + "</div>";
+  }
 
 }
 
@@ -96,9 +127,9 @@ $jit.RGraph.Plot.EdgeTypes.implement({
         y = from.y + 0.5 * (to.y - from.y),
         ctx = canvas.getCtx();
 
-      ctx.font = 'normal 11px Verdana';
-      ctx.fillStyle="#ff0000";
-      ctx.fillText(name, x, y);
+      //ctx.font = 'normal 11px Verdana';
+      //ctx.fillStyle="#ff0000";
+      //ctx.fillText(name, x, y);
 
     },
     'contains': function(adj, pos) {
