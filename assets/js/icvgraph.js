@@ -11,6 +11,7 @@ function ICVGraph (container_id) {
 
   self._container = container_id;
   self._busy = false;
+  self._preventNextClick = false;
 
   var labelType, useGradients, nativeTextSupport, animate,
     container = $('#' + self._container),
@@ -50,6 +51,7 @@ function ICVGraph (container_id) {
     //zooming by scrolling and panning.
     Navigation: {
       enable: true,
+      type: 'auto',
       panning: true,
       zooming: 10
     },
@@ -62,18 +64,28 @@ function ICVGraph (container_id) {
       lineWidth: 3
     },
 
-    Events: {
+    Tips: {
       enable: true,
-      onMouseEnter: function (node, eventInfo, e) {
-        console.log("enter");
-      },
-      onMouseLeave: function (node, eventInfo, e) {
-        console.log("leave");
+      type: 'Native',
+      offsetX: 10,
+      offsetY: 10,
+      onShow: function(tip, node) {
+        tip.innerHTML = node.name;
       }
     },
 
-    onBeforeCompute: function (node) {
-
+    Events: {
+      enable: true,
+      onMouseEnter: function (node, eventInfo, e) {
+        //console.log("enter");
+      },
+      onMouseLeave: function (node, eventInfo, e) {
+        //console.log("leave");
+      },
+      onDragEnd: function(node, eventInfo, e){
+        $jit.util.event.stop(e);
+        self._preventNextClick = true;
+      }
     },
 
     //Add the name of the node in the correponding label
@@ -109,21 +121,25 @@ function ICVGraph (container_id) {
       }
 
 
-      domElement.onclick = function () {
-        if (!self.isBusy() && self.rgraph.root != node.id) {
-          self.setBusy(true);
+      domElement.onclick = function (a, b, c) {
+        if (self._preventNextClick) {
+          self._preventNextClick = false;
+        } else {
+          if (!self.isBusy() && self.rgraph.root != node.id) {
+            self.setBusy(true);
 
-          var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
-          if (rootNodeDomElement.length) {
-            self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
-              self.rgraph.onClick(node.id, {
-                hideLabels: false,
-                duration: 500,
-                onComplete: function () {
-                  self.setBusy(false);
-                }
-              });
-            })
+            var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
+            if (rootNodeDomElement.length) {
+              self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
+                self.rgraph.onClick(node.id, {
+                  hideLabels: false,
+                  duration: 500,
+                  onComplete: function () {
+                    self.setBusy(false);
+                  }
+                });
+              })
+            }
           }
         }
       };
@@ -142,15 +158,11 @@ function ICVGraph (container_id) {
         if (self.isBusy()) {
           $jit.util.event.stop(e);
         } else {
-          console.log("ROOT NODE:");
-          console.log(self.rgraph.root);
           if (self.rgraph.root != node.id) {
             self._mouseLeaveOnNode(domElement, node, function (dE, n) {
 
             });
-          } else console.log("WAS ROOT");
-
-
+          }
         }
       };
 
