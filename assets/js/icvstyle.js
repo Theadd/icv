@@ -11,6 +11,8 @@ var ICVStyle = {
   },
   theme: {
     default: {
+
+      //Default Theme
       nodeType: {
         default: {
           //node state
@@ -20,7 +22,15 @@ var ICVStyle = {
             //overridable: true,
             //type: 'custom',
             color: '#445978',
-            dim: 32
+            dim: 32,
+            //CanvasStyles: {
+              //fillStyle: '#daa',
+              //strokeStyle: '#fff',
+              //lineWidth: 1
+            //},
+            "extended": {
+              "radialGradient": false
+            }
           },
           hover: {
             dim: 92
@@ -46,6 +56,66 @@ var ICVStyle = {
         "backgroundColor": 'transparent',
         "stickBackgroundImage": true
       }
-    }
+    },
+
+    "flatline": (function () {
+      var value = $.extend(true, {}, ICVStyle.theme.default);
+
+      value.nodeType.default.normal.CanvasStyles = { "strokeStyle": "#fff", lineWidth: 1 };
+
+      return value;
+    }),
+
+    //SoapBubble Theme
+    "soapbubble": (function () {
+      var soapbubble = {
+        nodeType: {
+          default: {
+            normal: {
+              CanvasStyles: {
+                strokeStyle: '#fff',
+                lineWidth: 1
+              },
+              "extended": {
+                "radialGradient": {
+                  "0": '#445978',
+                  "1": '#fff'
+                }
+              }
+            }
+          }
+        }
+      };
+
+      return $.extend(true, {}, ICVStyle.theme.default, soapbubble);
+    }),
+
+    //ReverseSoapBubble Theme (Inner view of soap bubbles)
+    "reversesoapbubble": (function () {
+      var reversesoapbubble = {
+        nodeType: {
+          default: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": '#445978',
+                  "0.5": '#000',
+                  "0.75": '#445978',
+                  "1": '#fff'
+                }
+              }
+            }
+          }
+        }
+      };
+
+      return $.extend(true, {}, ICVStyle.theme.soapbubble, reversesoapbubble);
+    })
+
+
   }
 };
+
+ICVStyle.theme.flatline = ICVStyle.theme.flatline();
+ICVStyle.theme.soapbubble = ICVStyle.theme.soapbubble();
+ICVStyle.theme.reversesoapbubble = ICVStyle.theme.reversesoapbubble();

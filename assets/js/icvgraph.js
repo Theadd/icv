@@ -1,12 +1,6 @@
 var graph;
 
-$(document).ready(function(){
-  $("#interactive-cv").height($(window).height());
-  graph = new ICVGraph('interactive-cv');
-  graph.load(techs_json);
-});
-
-function ICVGraph (container_id) {
+function ICVGraph (container_id, force_theme) {
   var self = this;
   if (!(self instanceof ICVGraph)) return new ICVGraph(container_id, generator);
 
@@ -17,7 +11,7 @@ function ICVGraph (container_id) {
 
   var labelType, useGradients, nativeTextSupport, animate,
     container = $('#' + self._container),
-    theme = container.data('theme') || 'default';
+    theme = force_theme || container.data('theme') || 'default';
 
   container.addClass('icv-theme-' + theme);
   self._generator = new ICVGenerator(theme);
@@ -60,12 +54,16 @@ function ICVGraph (container_id) {
       zooming: 10
     },
     //Set Node and Edge styles.
-    Node: self.getGenerator().getNodeTypeFor('default', null, {overridable: true, type: 'custom'}),
+    Node: self.getGenerator().getNodeTypeFor('default', null, {
+      overridable: true,
+      type: 'custom'
+    }),
     Edge: {
       overridable: true,
       type: 'custom',
-      color: '#4e7844',
-      lineWidth: 3
+      //color: '#4e7844',
+      color: '#ffffff',
+      lineWidth: 2
     },
 
     Tips: {
@@ -161,6 +159,7 @@ function ICVGraph (container_id) {
       style.top = (top - h / 2) + 'px';
     },
     onBeforePlotLine: function(adj) {
+
       if (self._stickBackgroundImage) {
         var bg_w = 260, bg_h = 260, background_pos_x = 30, background_pos_y = 30;
         var x = self.rgraph.canvas.translateOffsetX,

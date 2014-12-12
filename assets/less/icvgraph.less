@@ -1,4 +1,23 @@
 
+@font-face {
+  font-family: 'Frijole';
+  font-style: normal;
+  font-weight: 400;
+  //src: local('Frijole'), url("../fonts/Frijole-Regular.ttf") format('ttf');
+  src: url(../fonts/Frijole-Regular.woff);
+}
+
+@font-face {
+  font-family: 'Frijole';
+  font-style: normal;
+  font-weight: bold;
+  //src: local('Frijole'), url("../fonts/Frijole-Regular.ttf") format('ttf');
+  src: url(../fonts/Frijole-Regular.woff);
+}
+
+@import 'themes/default';
+@import 'themes/soapbubble';
+
 #interactive-cv {
   position: relative;
   width: 100%;
@@ -7,7 +26,7 @@
   overflow: hidden;
   background-color: #1c1d21;
 
-  //default style
+  //plain style
   .node {
 
     //background-color: red;
@@ -84,68 +103,17 @@
 
   //theme specific styles
 
-  &.icv-theme-default {
-    //background-color: #1c1d21;
-    background-image: url("../img/bg.png");
 
-    .node {
-      font-family: 'Frijole', Verdana;
-      text-shadow: 2px 2px 2px black;
+  &.icv-theme-primitive {
+    //primitive
+  }
 
-      &.icv-exp-5 {
-        font-size: 20px;
-        .inline-expansion .icv-experience {
-          width: 20px;
-          height: 20px;
-          background-size: 20px;
-        }
-      }
+  &.icv-theme-default, &.icv-theme-flatline {
+    .icv-theme-default;
+  }
 
-      &.icv-exp-4 {
-        font-size: 18px;
-        .inline-expansion .icv-experience {
-          width: 18px;
-          height: 18px;
-          background-size: 18px;
-        }
-      }
-
-      &.icv-exp-3 {
-        font-size: 16px;
-        .inline-expansion .icv-experience {
-          width: 16px;
-          height: 16px;
-          background-size: 16px;
-        }
-      }
-
-      &.icv-exp-2 {
-        font-size: 14px;
-        .inline-expansion .icv-experience {
-          width: 14px;
-          height: 14px;
-          background-size: 14px;
-        }
-      }
-
-      &.icv-exp-2 {
-        font-size: 12px;
-        .inline-expansion .icv-experience {
-          width: 12px;
-          height: 12px;
-          background-size: 12px;
-        }
-      }
-
-      .expansion {
-        font-family: Verdana;
-      }
-
-      .inline-expansion {
-        font-family: Verdana;
-      }
-
-    }
+  &.icv-theme-soapbubble, &.icv-theme-reversesoapbubble {
+    .icv-theme-soapbubble;
   }
 
 

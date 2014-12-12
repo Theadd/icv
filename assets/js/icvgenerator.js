@@ -91,13 +91,25 @@ $jit.RGraph.Plot.NodeTypes.implement({
 
       node.setData('color', color);
 
-      if (node.data.active || false) {
+      if (nodeType.extended && typeof nodeType.extended.radialGradient === "object") {
+        //RADIAL GRADIENT
+        var colorStopList = Object.keys(nodeType.extended.radialGradient),
+          color0_radius = Math.round(dim / 2),
+          color1_start = Math.round(dim * 0.75),
+          gradient = ctx.createRadialGradient(
+            pos.x, pos.y, color0_radius,
+            pos.x + color1_start, pos.y + color1_start, dim * 3
+          );
 
-        ctx.fillStyle = "#006900";
-        this.nodeHelper.circle.render('fill', pos, dim + 8, canvas);
+        for (var stop in colorStopList) {
+          gradient.addColorStop(Number(colorStopList[stop]), nodeType.extended.radialGradient[colorStopList[stop]]);
+        }
+
+        ctx.fillStyle = gradient;
       }
-      ctx.fillStyle = color;
+
       this.nodeHelper.circle.render('fill', pos, dim, canvas);
+      this.nodeHelper.circle.render('stroke', pos, dim, canvas);
     },
     'contains': function(node, pos){
       var npos = node.pos.getc(true),
@@ -118,7 +130,7 @@ $jit.RGraph.Plot.EdgeTypes.implement({
         nodeType = graph.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
         color = nodeType.color;
 
-      adj.setData('color', color);
+      adj.setData('color', '#ffffff');
 
       this.edgeHelper.line.render(from, to, canvas);
 
