@@ -55,16 +55,12 @@ ICVGenerator.prototype.getNodeTypeFor = function (type, opts, ext) {
     value = self._cache[id] || false;
 
   if (!value) {
-    value = $.extend(true, {}, self._theme.nodeType.default['normal'] || {});
+    value = $.extend(true, value, self._theme.nodeType[type]['normal'] || {});
+
     if (state != 'normal') {
-      value = $.extend(true, value, self._theme.nodeType.default[state] || {});
+      value = $.extend(true, value, self._theme.nodeType[type][state] || {});
     }
-    if (type != 'default') {
-      value = $.extend(true, value, self._theme.nodeType[type]['normal'] || {});
-      if (state != 'normal') {
-        value = $.extend(true, value, self._theme.nodeType[type][state] || {});
-      }
-    }
+
     self._cache[id] = value;
   }
 

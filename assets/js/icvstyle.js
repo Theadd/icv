@@ -90,7 +90,10 @@ var ICVStyle = {
       return $.extend(true, {}, ICVStyle.theme.default, soapbubble);
     }),
 
-    //ReverseSoapBubble Theme (Inner view of soap bubbles)
+    /** ReverseSoapBubble Theme (Inner view of soap bubbles)
+     *
+     * Works fine in IE 11, Chrome 39 and Opera 26 but in Firefox looks like SoapBubble.
+     */
     "reversesoapbubble": (function () {
       var reversesoapbubble = {
         nodeType: {
