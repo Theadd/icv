@@ -131,6 +131,8 @@ function ICVGraph (container_id) {
             var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
             if (rootNodeDomElement.length) {
               self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
+
+                self.animatedCanvasTranslate(500);
                 self.rgraph.onClick(node.id, {
                   hideLabels: false,
                   duration: 500,
@@ -270,4 +272,26 @@ ICVGraph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
       }
     });
   });
+}
+
+ICVGraph.prototype.animatedCanvasTranslate = function (duration, callback) {
+  var self = this;
+
+  var x = self.rgraph.canvas.translateOffsetX * -1;
+  var y = self.rgraph.canvas.translateOffsetY * -1;
+  duration = duration || 1000;
+  var rounds = (duration / 1000) * 50;
+  var xpf = x / rounds;
+  var ypf = y / rounds;
+  callback = callback || function () {};
+
+  var timer = setInterval(function () {
+    self.rgraph.canvas.translate(xpf, ypf);
+    if (--rounds == 0) {
+      clearInterval(timer);
+      timer = 0;
+      return callback();
+    }
+  }, 20); //25ms == 40fps, 20ms == 50fps
+
 }
