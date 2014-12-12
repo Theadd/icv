@@ -1,0 +1,81 @@
+
+#interactive-cv {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  margin: auto;
+  overflow: hidden;
+  background-color: #1c1d21;
+
+  //default style
+  .node {
+
+    //background-color: red;
+    font-weight: bold;
+    max-width: 200px;
+    font-family: Verdana;
+
+    /*&:hover {
+      font-size: 2.0em;
+    }*/
+
+    .expansion {
+      display: none;
+      font-weight: normal;
+    }
+
+    .inline-expansion {
+      font-weight: normal;
+      display: inline-block;
+      margin-left: 10px;
+      background-color: blue;
+
+      .icv-experience {
+
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+
+        &.icv-bar-5 {
+          background-image: url("../img/bar4.png");
+        }
+
+        &.icv-bar-4 {
+          background-image: url("../img/bar3.png");
+        }
+      }
+    }
+
+    &.open {
+      //background-color: blue !important;
+
+      .expansion {
+        display: block;
+      }
+    }
+
+  }
+
+  //theme specific styles
+
+  &.icv-theme-default {
+    background-color: #1c1d21;
+
+    .node {
+      font-family: 'Frijole', Verdana;
+
+      .expansion {
+        font-family: Verdana;
+      }
+
+      .inline-expansion {
+        font-family: Verdana;
+      }
+
+    }
+  }
+
+
+}
+
+
