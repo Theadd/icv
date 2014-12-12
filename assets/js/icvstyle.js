@@ -33,12 +33,12 @@ var ICVStyle = {
         },
         framework: {
           normal: {
-            color: '#784444'
+            color: '#4e7844'
           }
         },
         language: {
           normal: {
-            color: '#784444'
+            color: '#4e7844'
           }
         }
       },

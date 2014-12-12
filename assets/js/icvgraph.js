@@ -1,6 +1,7 @@
 var graph;
 
 $(document).ready(function(){
+  $("#interactive-cv").height($(window).height());
   graph = new ICVGraph('interactive-cv');
   graph.load(techs_json);
 });
@@ -68,7 +69,7 @@ function ICVGraph (container_id) {
     },
 
     Tips: {
-      enable: true,
+      enable: false,
       type: 'Native',
       offsetX: 10,
       offsetY: 10,
