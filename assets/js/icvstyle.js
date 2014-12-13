@@ -83,6 +83,16 @@ var ICVStyle = {
                 }
               }
             }
+          },
+          framework: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": '#4e7844',
+                  "1": '#fff'
+                }
+              }
+            }
           }
         }
       };
@@ -105,6 +115,18 @@ var ICVStyle = {
                   "0.5": '#000',
                   "0.75": '#445978',
                   "1": '#fff'
+                }
+              }
+            },
+            framework: {
+              normal: {
+                "extended": {
+                  "radialGradient": {
+                    "0": '#4e7844',
+                    "0.5": '#000',
+                    "0.75": '#4e7844',
+                    "1": '#fff'
+                  }
                 }
               }
             }
