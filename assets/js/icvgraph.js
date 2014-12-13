@@ -289,3 +289,83 @@ ICVGraph.prototype.animatedCanvasTranslate = function (duration, callback) {
   }, 20); //25ms == 40fps, 20ms == 50fps
 
 }
+
+ICVGraph.prototype.bindKeyShortcuts = function () {
+  var self = this,
+    up = false,
+    down = false,
+    right = false,
+    left = false;
+
+  //Zoom
+  Mousetrap.bind('pageup', function() {
+    self.zoom(15);
+  });
+
+  Mousetrap.bind('pagedown', function() {
+    self.zoom(-15);
+  });
+
+  //Arrow keys
+  Mousetrap.bind('left', function(e, combo) {
+    left = true;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keydown');
+  Mousetrap.bind('left', function(e, combo) {
+    left = false;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keyup');
+  Mousetrap.bind('right', function(e, combo) {
+    right = true;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keydown');
+  Mousetrap.bind('right', function(e, combo) {
+    right = false;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keyup');
+
+  Mousetrap.bind('up', function(e, combo) {
+    up = true;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keydown');
+  Mousetrap.bind('up', function(e, combo) {
+    up = false;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keyup');
+  Mousetrap.bind('down', function(e, combo) {
+    down = true;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keydown');
+  Mousetrap.bind('down', function(e, combo) {
+    down = false;
+    self.pan(up, right, down, left);
+    return true;
+  }, 'keyup');
+
+}
+
+ICVGraph.prototype.zoom = function (delta) {
+  var self = this;
+
+  var val = self.rgraph.controller.Navigation.zooming/1000;
+  var ans = 1 - (delta * val);
+  self.rgraph.canvas.scale(ans, ans);
+}
+
+ICVGraph.prototype.pan = function (up, right, down, left, distance) {
+  var self = this;
+
+  distance = distance || 15;
+
+  var modX = ((right) ? -1 * distance : 0) + ((left) ? distance : 0),
+    modY = ((up) ? distance : 0) + ((down) ? -1 * distance : 0);
+
+  self.rgraph.canvas.translate(modX, modY);
+}

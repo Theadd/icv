@@ -19,6 +19,8 @@ $(document).ready(function(){
   $("#interactive-cv").height($(window).height());
   graph = new ICVGraph('interactive-cv', GetURLParameter('theme') || null);
   graph.load(techs_json);
+
+  graph.bindKeyShortcuts();
 });
 
 
