@@ -15,7 +15,7 @@ var ICVStyle = {
       //Default Theme
       nodeType: {
         default: {
-          //node state
+          //node state. (normal, open)
           normal: {
             //color: 'rgba(200, 220, 230, 0.5)',
             //edgeColor: 'rgba(200, 220, 230, 0.5)'
@@ -29,10 +29,14 @@ var ICVStyle = {
               //lineWidth: 1
             //},
             "extended": {
-              "radialGradient": false
+              "radialGradient": false,
+              /** Draw multiple node borders for each level of experience if
+               * 'true' or specify the number of circles to draw. */
+              "multipleCircleWaves": false,
+              "centerOnClick": true
             }
           },
-          hover: {
+          open: {
             dim: 92
           }
         },
@@ -80,7 +84,8 @@ var ICVStyle = {
                 "radialGradient": {
                   "0": '#445978',
                   "1": '#fff'
-                }
+                },
+                "centerOnClick": false
               }
             }
           },
@@ -115,7 +120,9 @@ var ICVStyle = {
                   "0.5": '#000',
                   "0.75": '#445978',
                   "1": '#fff'
-                }
+                },
+                //Draw multiple node borders for each level of experience
+                "multipleCircleWaves": true
               }
             },
             framework: {

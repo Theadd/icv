@@ -53,3 +53,13 @@ a {
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
   padding: 7px;
 }
+.tooltipster-base {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: #333;
+}
+.tooltipster-base .tooltipster-content {
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: 8px 10px;
+}

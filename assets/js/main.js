@@ -21,6 +21,7 @@ $(document).ready(function(){
   graph.load(techs_json);
 
   graph.bindKeyShortcuts();
+  bindUIEvents();
 });
 
 

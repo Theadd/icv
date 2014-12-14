@@ -97,27 +97,40 @@ function ICVGraph (container_id, force_theme) {
 
       self.getGenerator().buildNodeElement(domElement, node);
 
+      node.setData('state', 'normal');
+
       domElement.onclick = function (a, b, c) {
+
+
+
+
+        //return;
         if (self._preventNextClick) {
           self._preventNextClick = false;
         } else {
-          if (!self.isBusy() && self.rgraph.root != node.id) {
-            self.setBusy(true);
+          var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: node.getData('state') || 'normal'});
 
-            var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
-            if (rootNodeDomElement.length) {
-              self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
+          if (nodeType.extended && nodeType.extended.centerOnClick) {
 
-                self.animatedCanvasTranslate(500);
-                self.rgraph.onClick(node.id, {
-                  hideLabels: false,
-                  duration: 500,
-                  onComplete: function () {
-                    self.setBusy(false);
-                  }
-                });
-              })
+            if (!self.isBusy() && self.rgraph.root != node.id) {
+              self.setBusy(true);
+
+              var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
+              if (rootNodeDomElement.length) {
+                self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
+
+                  self.animatedCanvasTranslate(500);
+                  self.rgraph.onClick(node.id, {
+                    hideLabels: false,
+                    duration: 500,
+                    onComplete: function () {
+                      self.setBusy(false);
+                    }
+                  });
+                })
+              }
             }
+
           }
         }
       };
@@ -126,6 +139,7 @@ function ICVGraph (container_id, force_theme) {
         if (self.isBusy()) {
           $jit.util.event.stop(e);
         } else {
+          node.setData('state', 'open');
           self._mouseEnterOnNode(domElement, node, function (dE, n) {
 
           });
@@ -137,6 +151,7 @@ function ICVGraph (container_id, force_theme) {
           $jit.util.event.stop(e);
         } else {
           if (self.rgraph.root != node.id) {
+            node.setData('state', 'normal');
             self._mouseLeaveOnNode(domElement, node, function (dE, n) {
 
             });
@@ -222,7 +237,7 @@ ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
   var self = this;
 
   $(domElement).addClass('working').promise().done(function () {
-    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'hover'});
+    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'});
 
     callback = callback || function () {};
     node.setData('dim', node.getData('dim'), 'start');
@@ -236,6 +251,15 @@ ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
 
         $(domElement).addClass('open').removeClass('working').promise().done(function () {
           self.rgraph.plot();
+          $('.tooltip').tooltipster({
+            trigger: 'click',
+            interactive: true,
+            contentAsHTML: true,
+            animation: 'grow',
+            minWidth: 100,
+            maxWidth: 300,
+            position: 'right'
+          });    //TODO: maybe its not required here but after loading json
           callback(domElement, node);
         });
       }

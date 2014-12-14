@@ -9,35 +9,25 @@ function ICVGenerator (theme) {
 }
 
 ICVGenerator.prototype.buildNodeElement = function (element, node) {
-  var self = this;
-
-  /*type: 'framework',
-   experience: 5,
-   active: true,
-   years: 0.5,
-   desc: 'Chromium based cross-platform desktop applications using JavaScript, HTML and CSS.',
-   url: 'https://github.com/atom/atom-shell'*/
-
-  var expanded = !(node.data.relation || false);
+  var self = this,
+    expanded = !(node.data.relation || false);  //TODO: Get rid of this!
 
   if (expanded) {
-    var inlineExpansion = "<div class=\"inline-expansion\">",
-      expansion = "<div class=\"expansion\">",
-      experience = Math.max(Math.min(Math.round(parseInt(node.data.experience || '1')), 5), 1);
+    var expansion = "<div class=\"expansion\">",
+      level = Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1);
 
-    $(element).addClass('icv-exp-' + experience);
+    $(element).addClass('icv-level-' + level + ((Boolean(node.data.active)) ? ' icv-active' : ''));
 
-    inlineExpansion += '<span class="icv-experience"></span>';
-    //inlineExpansion += '<span class="icv-active">' + ((node.data.active || false) ? 'ACTIVE' : 'IN THE PAST') + '</span>';
-    //inlineExpansion += '<span class="icv-years">' + (node.data.years || 0) + '</span>';
+    expansion += '<span class="icv-note">' + (node.data.note || '') + '</span><br />';
 
-    inlineExpansion += "</div>";
-
-    expansion += '<span class="icv-desc">' + (node.data.desc || '') + '</span>';
-
+    expansion += '<a href="#' + node.id + '" class="icv-btn icv-btn-root"><i class="fa fa-fw fa-puzzle-piece"></i></a>';
+    expansion += '<a href="' + (node.data.url || '#') + '" target="_blank" class="icv-btn icv-btn-link' +
+      ((Boolean(node.data.url)) ? '' : ' disabled') + '"><i class="fa fa-fw fa-home"></i></a>';
+    expansion += '<a href="#" class="icv-btn icv-btn-desc' + ((Boolean(node.data.desc)) ? ' tooltip' : ' disabled') +
+      '" title="' + (node.data.desc || '') + '"><i class="fa fa-fw fa-info"></i></a>';
     expansion += "</div>";
 
-    element.innerHTML = node.name + inlineExpansion + expansion;
+    element.innerHTML = node.name + expansion;
   } else {
     element.innerHTML = node.name + "<div class=\"expansion\">" + node.data.relation + "</div>";
   }
@@ -110,6 +100,19 @@ $jit.RGraph.Plot.NodeTypes.implement({
 
       this.nodeHelper.circle.render('fill', pos, dim, canvas);
       this.nodeHelper.circle.render('stroke', pos, dim, canvas);
+
+      if (nodeType.extended && nodeType.extended.multipleCircleWaves) {
+        var waves = 1
+        if (typeof nodeType.extended.multipleCircleWaves === "boolean") {
+          waves = Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1);
+        } else if (typeof nodeType.extended.multipleCircleWaves === "number") {
+          waves = nodeType.extended.multipleCircleWaves
+        }
+
+        for (; waves > 1; --waves) {
+          this.nodeHelper.circle.render('stroke', pos, dim - ((waves * 2) - 2), canvas);
+        }
+      }
     },
     'contains': function(node, pos){
       var npos = node.pos.getc(true),

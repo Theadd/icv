@@ -25,9 +25,9 @@ var techs_json = {
           name: "Atom-Shell",
           data: {
             type: 'framework',
-            experience: 5,
+            level: 5,
             active: true,
-            years: 0.5,
+            note: 'Chromium based cross-platform desktop applications',
             desc: 'Chromium based cross-platform desktop applications using JavaScript, HTML and CSS.',
             url: 'https://github.com/atom/atom-shell'
           },
@@ -45,10 +45,10 @@ var techs_json = {
         name: "C++",
         data: {
           type: 'language',
-          experience: 3,
+          level: 3,
           active: false,
-          years: 5,
-          desc: 'Nothing to say here.',
+          note: '',
+          desc: 'C++ (pronounced cee plus plus) is a general purpose programming language. It has imperative, object-oriented and generic programming features.',
           url: ''
         },
         children: [{
