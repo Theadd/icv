@@ -11,6 +11,10 @@ function bindUIEvents() {
         //center graph on node
         //ev.preventDefault();
         console.log("rooting");
+
+        var id = $(this).closest(".node").attr('id');
+
+        graph.setRootNode(graph.getNode(id));
       }
 
       if ($(this).hasClass('icv-btn-desc')) {

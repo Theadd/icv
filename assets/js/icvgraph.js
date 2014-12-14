@@ -99,38 +99,18 @@ function ICVGraph (container_id, force_theme) {
 
       node.setData('state', 'normal');
 
-      domElement.onclick = function (a, b, c) {
+      domElement.onclick = function () {
 
-
-
-
-        //return;
         if (self._preventNextClick) {
           self._preventNextClick = false;
         } else {
-          var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: node.getData('state') || 'normal'});
+          var nodeType = self.getGenerator().getNodeTypeFor(
+            node.data.type || null,
+            { state: node.getData('state') || 'normal' }
+          );
 
           if (nodeType.extended && nodeType.extended.centerOnClick) {
-
-            if (!self.isBusy() && self.rgraph.root != node.id) {
-              self.setBusy(true);
-
-              var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
-              if (rootNodeDomElement.length) {
-                self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
-
-                  self.animatedCanvasTranslate(500);
-                  self.rgraph.onClick(node.id, {
-                    hideLabels: false,
-                    duration: 500,
-                    onComplete: function () {
-                      self.setBusy(false);
-                    }
-                  });
-                })
-              }
-            }
-
+            self.setRootNode(node);
           }
         }
       };
@@ -392,4 +372,34 @@ ICVGraph.prototype.pan = function (up, right, down, left, distance) {
     modY = ((up) ? distance : 0) + ((down) ? -1 * distance : 0);
 
   self.rgraph.canvas.translate(modX, modY);
+}
+
+ICVGraph.prototype.setRootNode = function (node, callback) {
+  var self = this;
+
+  callback = callback || function () {};
+
+  if (!self.isBusy() && self.rgraph.root != node.id) {
+    self.setBusy(true);
+
+    var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
+    if (rootNodeDomElement.length) {
+      self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
+
+        self.animatedCanvasTranslate(500);
+        self.rgraph.onClick(node.id, {
+          hideLabels: false,
+          duration: 500,
+          onComplete: function () {
+            self.setBusy(false);
+            return callback(null, node);
+          }
+        });
+      })
+    }
+  }
+}
+
+ICVGraph.prototype.getNode = function (id) {
+  return this.rgraph.graph.getNode(id)
 }
