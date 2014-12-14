@@ -36,6 +36,12 @@ function ICVGraph (container_id, force_theme) {
 
   })();
 
+  $(window).on('hashchange', function() {
+    if (self.getGenerator().getConfig('centerNodeOnHashChange')) {
+      self.centerNodeFromHash();
+    }
+  });
+
   self.rgraph = new $jit.RGraph({
     //Where to append the visualization
     injectInto: self._container,
@@ -182,8 +188,10 @@ function ICVGraph (container_id, force_theme) {
   });
 }
 
-ICVGraph.prototype.load = function (json) {
+ICVGraph.prototype.load = function (json, callback) {
   var self = this
+
+  callback = callback || function () {};
 
   self.setBusy(true);
   //load JSON data
@@ -203,6 +211,7 @@ ICVGraph.prototype.load = function (json) {
       if (rootNodeDomElement.length) {
         self._mouseEnterOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
           self.setBusy(false);
+          callback(null, {});
         })
       }
     }
@@ -214,6 +223,8 @@ ICVGraph.prototype.isBusy = function () {
 }
 
 ICVGraph.prototype.setBusy = function (busy) {
+  console.log("\t\t\tBUSY = " + busy);
+  console.trace();
   this._busy = !!(busy || false);
 }
 
@@ -387,9 +398,11 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
   callback = callback || function () {};
 
+  console.log("within setRootNode, node: " + node.id + ", busy: " + self.isBusy());
   if (!self.isBusy() && self.rgraph.root != node.id) {
     self.setBusy(true);
 
+    console.log("wasnt busy");
     var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
     if (rootNodeDomElement.length) {
       self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
@@ -410,4 +423,18 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
 ICVGraph.prototype.getNode = function (id) {
   return this.rgraph.graph.getNode(id)
+}
+
+ICVGraph.prototype.centerNodeFromHash = function () {
+  var self = this, foundId = location.hash.replace(/^#/, '');
+
+  console.log("centerNodeFromHash, foundId: " + foundId)
+  if (foundId.length && foundId != location.hash) {
+    console.log("enter");
+    var node = self.getNode(foundId);
+    if (node) {
+      console.log(node);
+      self.setRootNode(node);
+    }
+  }
 }

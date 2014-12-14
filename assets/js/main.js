@@ -18,10 +18,12 @@ function GetURLParameter (sParam) {
 $(document).ready(function(){
   $("#interactive-cv").height($(window).height());
   graph = new ICVGraph('interactive-cv', GetURLParameter('theme') || null);
-  graph.load(techs_json);
+  graph.load(techs_json, function() {
+    graph.bindKeyShortcuts();
+    bindUIEvents();
 
-  graph.bindKeyShortcuts();
-  bindUIEvents();
+    graph.centerNodeFromHash();
+  });
 });
 
 

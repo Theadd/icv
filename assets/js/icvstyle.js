@@ -60,9 +60,10 @@ var ICVStyle = {
           }
         }
       },
-      config: {
+      "config": {
         "backgroundColor": 'transparent',
-        "stickBackgroundImage": true
+        "stickBackgroundImage": true,
+        "centerNodeOnHashChange": false
       }
     },
 
@@ -104,6 +105,9 @@ var ICVStyle = {
               }
             }
           }
+        },
+        "config": {
+        "centerNodeOnHashChange": true
         }
       };
 

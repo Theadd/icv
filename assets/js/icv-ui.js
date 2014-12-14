@@ -8,13 +8,10 @@ function bindUIEvents() {
 
     } else {
       if ($(this).hasClass('icv-btn-root')) {
-        //center graph on node
-        //ev.preventDefault();
-        console.log("rooting");
+        //var id = $(this).closest(".node").attr('id');
 
-        var id = $(this).closest(".node").attr('id');
-
-        graph.setRootNode(graph.getNode(id));
+        //graph.setRootNode(graph.getNode(id));
+        console.log("changing hash");
       }
 
       if ($(this).hasClass('icv-btn-desc')) {
