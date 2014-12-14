@@ -145,9 +145,9 @@ $jit.RGraph.Plot.EdgeTypes.implement({
       var from = adj.nodeFrom.pos.getc(true),
         to = adj.nodeTo.pos.getc(true),
         nodeType = graph.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
-        color = nodeType.color;
+        color = (nodeType.extended && nodeType.extended.edgeColor) ? nodeType.extended.edgeColor : nodeType.color;
 
-      adj.setData('color', '#ffffff');
+      adj.setData('color', color);
 
       this.edgeHelper.line.render(from, to, canvas);
 

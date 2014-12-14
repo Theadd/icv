@@ -33,7 +33,9 @@ var ICVStyle = {
               //remove buttons from node expansion (normal state only)
               "removeCenterButton": true,
               "removeUrlButton": false,
-              "removeDescButton": false
+              "removeDescButton": false,
+              /** Color of the line pointing to this node. */
+              "edgeColor": '#445978'
             }
           },
           open: {
@@ -85,6 +87,7 @@ var ICVStyle = {
       var value = $.extend(true, {}, ICVStyle.theme.default);
 
       value.nodeType.default.normal.CanvasStyles = { "strokeStyle": "#fff", lineWidth: 1 };
+      value.nodeType.default.normal.extended.edgeColor = '#fff';
 
       return value;
     }),
@@ -105,7 +108,8 @@ var ICVStyle = {
                   "1": '#fff'
                 },
                 "centerOnClick": false,
-                "removeCenterButton": false
+                "removeCenterButton": false,
+                "edgeColor": '#fff'
               }
             }
           },
@@ -153,7 +157,8 @@ var ICVStyle = {
                 "centerOnClick": false,
                 "removeCenterButton": false,
                 "multipleCircleWaves": true,
-                "levelBasedNameSize": false
+                "levelBasedNameSize": false,
+                "edgeColor": '#fff'
               }
             }
           },
