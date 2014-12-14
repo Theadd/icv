@@ -33,7 +33,11 @@ var ICVStyle = {
               /** Draw multiple node borders for each level of experience if
                * 'true' or specify the number of circles to draw. */
               "multipleCircleWaves": false,
-              "centerOnClick": true
+              "centerOnClick": true,
+              //remove buttons from node expansion (normal state only)
+              "removeCenterButton": true,
+              "removeUrlButton": false,
+              "removeDescButton": false
             }
           },
           open: {
@@ -85,7 +89,8 @@ var ICVStyle = {
                   "0": '#445978',
                   "1": '#fff'
                 },
-                "centerOnClick": false
+                "centerOnClick": false,
+                "removeCenterButton": false
               }
             }
           },

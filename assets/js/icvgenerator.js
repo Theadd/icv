@@ -10,7 +10,8 @@ function ICVGenerator (theme) {
 
 ICVGenerator.prototype.buildNodeElement = function (element, node) {
   var self = this,
-    expanded = !(node.data.relation || false);  //TODO: Get rid of this!
+    expanded = !(node.data.relation || false),  //TODO: Get rid of this!
+    nodeType = graph.getGenerator().getNodeTypeFor(node.data.type || null);
 
   if (expanded) {
     var expansion = "<div class=\"expansion\">",
@@ -20,15 +21,25 @@ ICVGenerator.prototype.buildNodeElement = function (element, node) {
 
     expansion += '<span class="icv-note">' + (node.data.note || '') + '</span><br />';
 
-    expansion += '<a href="#' + node.id + '" class="icv-btn icv-btn-root"><i class="fa fa-fw fa-puzzle-piece"></i></a>';
-    expansion += '<a href="' + (node.data.url || '#') + '" target="_blank" class="icv-btn icv-btn-link' +
-      ((Boolean(node.data.url)) ? '' : ' disabled') + '"><i class="fa fa-fw fa-home"></i></a>';
-    expansion += '<a href="#" class="icv-btn icv-btn-desc' + ((Boolean(node.data.desc)) ? ' tooltip' : ' disabled') +
-      '" title="' + (node.data.desc || '') + '"><i class="fa fa-fw fa-info"></i></a>';
+    if (!(nodeType.extended && nodeType.extended.removeCenterButton)) {
+      expansion += '<a href="#' + node.id + '" class="icv-btn icv-btn-root"><i class="fa fa-fw fa-puzzle-piece"></i></a>';
+    }
+
+    if (!(nodeType.extended && nodeType.extended.removeUrlButton)) {
+      expansion += '<a href="' + (node.data.url || '#') + '" target="_blank" class="icv-btn icv-btn-link' +
+        ((Boolean(node.data.url)) ? '' : ' disabled') + '"><i class="fa fa-fw fa-home"></i></a>';
+    }
+
+    if (!(nodeType.extended && nodeType.extended.removeDescButton)) {
+      expansion += '<a href="#" class="icv-btn icv-btn-desc' + ((Boolean(node.data.desc)) ? ' tooltip' : ' disabled') +
+        '" title="' + (node.data.desc || '') + '"><i class="fa fa-fw fa-info"></i></a>';
+    }
+
     expansion += "</div>";
 
     element.innerHTML = node.name + expansion;
   } else {
+    //TODO: Get rid of this!
     element.innerHTML = node.name + "<div class=\"expansion\">" + node.data.relation + "</div>";
   }
 

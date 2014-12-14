@@ -7,6 +7,7 @@ function ICVGraph (container_id, force_theme) {
   self._container = container_id;
   self._busy = false;
   self._preventNextClick = false;
+  self._mouseDragStartAt = { x: 0, y: 0 };
 
 
   var labelType, useGradients, nativeTextSupport, animate,
@@ -86,7 +87,13 @@ function ICVGraph (container_id, force_theme) {
       },
       onDragEnd: function(node, eventInfo, e){
         $jit.util.event.stop(e);
-        self._preventNextClick = true;
+        if (Math.abs(self._mouseDragStartAt.x - e.x) + Math.abs(self._mouseDragStartAt.y - e.y) > 20) {
+          self._preventNextClick = true;
+        }
+      },
+      onDragStart: function(node, eventInfo, e){
+        $jit.util.event.stop(e);
+        self._mouseDragStartAt = { x: e.x, y: e.y };
       }
     },
 
@@ -104,6 +111,7 @@ function ICVGraph (container_id, force_theme) {
         if (self._preventNextClick) {
           self._preventNextClick = false;
         } else {
+
           var nodeType = self.getGenerator().getNodeTypeFor(
             node.data.type || null,
             { state: node.getData('state') || 'normal' }
