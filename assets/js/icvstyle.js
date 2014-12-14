@@ -125,7 +125,7 @@ var ICVStyle = {
           }
         },
         "config": {
-        "centerNodeOnHashChange": true
+          "centerNodeOnHashChange": true
         }
       };
 
@@ -241,6 +241,9 @@ var ICVStyle = {
               }
             }
           }
+        },
+        "config": {
+          "centerNodeOnHashChange": true
         }
       };
 
