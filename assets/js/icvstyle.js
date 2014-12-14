@@ -1,10 +1,4 @@
 
-
-//language(c),
-//technology(ajax),
-//skill/aptitude(UX, UNIT TESTING),
-//framework/package(sails, apache, express)
-
 var ICVStyle = {
   global: {
     url: ''
@@ -34,6 +28,8 @@ var ICVStyle = {
                * 'true' or specify the number of circles to draw. */
               "multipleCircleWaves": false,
               "centerOnClick": true,
+              /** Increase node name based on data.level value. */
+              "levelBasedNameSize": true,
               //remove buttons from node expansion (normal state only)
               "removeCenterButton": true,
               "removeUrlButton": false,
@@ -44,7 +40,15 @@ var ICVStyle = {
             dim: 92
           }
         },
-        aptitude: {
+        category: {
+          normal: {
+            color: '#445978',
+            "extended": {
+              "multipleCircleWaves": false
+            }
+          }
+        },
+        skill: {
           normal: {
             color: '#4e7844'
           }
@@ -55,6 +59,16 @@ var ICVStyle = {
           }
         },
         language: {
+          normal: {
+            color: '#4e7844'
+          }
+        },
+        library: {
+          normal: {
+            color: '#4e7844'
+          }
+        },
+        application: {
           normal: {
             color: '#4e7844'
           }
@@ -119,40 +133,114 @@ var ICVStyle = {
      * Works fine in IE 11, Chrome 39 and Opera 26 but in Firefox looks like SoapBubble.
      */
     "reversesoapbubble": (function () {
+      var colorList = [/*Lightblue*/'#a4bde3' , /*Yellow*/'#e3e3a4', /*Green*/'#4e7844', /*Red*/ '#e67070', /*Blue*/'#445978', /*Orange*/ '#e6b770', /*Cyan*/'#70dee6'];
+
       var reversesoapbubble = {
         nodeType: {
           default: {
             normal: {
+              CanvasStyles: {
+                strokeStyle: '#fff',
+                lineWidth: 1
+              },
               "extended": {
                 "radialGradient": {
-                  "0": '#445978',
+                  "0": colorList[0],
                   "0.5": '#000',
-                  "0.75": '#445978',
+                  "0.75": colorList[0],
                   "1": '#fff'
                 },
-                //Draw multiple node borders for each level of experience
-                "multipleCircleWaves": true
+                "centerOnClick": false,
+                "removeCenterButton": false,
+                "multipleCircleWaves": true,
+                "levelBasedNameSize": false
               }
-            },
-            framework: {
-              normal: {
-                "extended": {
-                  "radialGradient": {
-                    "0": '#4e7844',
-                    "0.5": '#000',
-                    "0.75": '#4e7844',
-                    "1": '#fff'
-                  }
-                }
+            }
+          },
+          category: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[1],
+                  "0.5": '#000',
+                  "0.75": colorList[1],
+                  "1": '#fff'
+                },
+                "multipleCircleWaves": false,
+                "levelBasedNameSize": false
+              }
+            }
+          },
+          framework: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": String(colorList[2]),
+                  "0.5": '#000',
+                  "0.75": String(colorList[2]),
+                  "1": '#fff'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          language: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": String(colorList[3]),
+                  "0.5": '#000',
+                  "0.75": String(colorList[3]),
+                  "1": '#fff'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          skill: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[4],
+                  "0.5": '#000',
+                  "0.75": colorList[4],
+                  "1": '#fff'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          library: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[5],
+                  "0.5": '#000',
+                  "0.75": colorList[5],
+                  "1": '#fff'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          application: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[6],
+                  "0.5": '#000',
+                  "0.75": colorList[6],
+                  "1": '#fff'
+                },
+                "levelBasedNameSize": true
               }
             }
           }
         }
       };
 
-      return $.extend(true, {}, ICVStyle.theme.soapbubble, reversesoapbubble);
+      return $.extend(true, {}, ICVStyle.theme.default, reversesoapbubble);
     })
-
 
   }
 };

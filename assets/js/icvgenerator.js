@@ -15,9 +15,10 @@ ICVGenerator.prototype.buildNodeElement = function (element, node) {
 
   if (expanded) {
     var expansion = "<div class=\"expansion\">",
-      level = Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1);
+      level = Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1),
+      levelClass = (nodeType.extended && nodeType.extended.levelBasedNameSize) ? ' icv-level-' + level : '';
 
-    $(element).addClass('icv-level-' + level + ((Boolean(node.data.active)) ? ' icv-active' : ''));
+    $(element).addClass(((Boolean(node.data.active)) ? 'icv-active' : '') + levelClass);
 
     expansion += '<span class="icv-note">' + (node.data.note || '') + '</span><br />';
 
@@ -102,7 +103,9 @@ $jit.RGraph.Plot.NodeTypes.implement({
             pos.x + color1_start, pos.y + color1_start, dim * 3
           );
 
+        colorStopList.sort();
         for (var stop in colorStopList) {
+          //console.log("\tColorStop " + Number(colorStopList[stop]) + " => " + nodeType.extended.radialGradient[colorStopList[stop]] + "\t" + node.name);
           gradient.addColorStop(Number(colorStopList[stop]), nodeType.extended.radialGradient[colorStopList[stop]]);
         }
 

@@ -1,24 +1,62 @@
-
+/**
+ * Available node types:
+ *    * default:
+ *        i.e.: default
+ *    * category:
+ *        i.e.: category, field, branch, group, etc.
+ *    * language:
+ *        i.e.: programming language, runtime environment, markup language, database management system, etc.
+ *        e.g.: C++, Node.js, Markdown, LaTeX, Redis, etc.
+ *    * framework:
+ *        i.e.: framework
+ *        Description: With a framework, the framework writer writes the application, and leaves out the interesting details, which you fill in.
+ *    * library:
+ *        i.e.: library, module, package, toolkit.
+ *        Description: Collection/module that provides functionality.
+ *        e.g.: jQuery, Qt, memcache, etc.
+ *    * skill:
+ *        i.e.: skill
+ *        e.g.: User Experience (UX), Unit Testing, SEO, etc.
+ *    * application:
+ *        i.e.: Application, Tool.
+ *        e.g.: Apache, Photoshop, Audacity, git, etc.
+ */
 var techs_json = {
   id: "1",
   name: "Skills",
-  children: [{
+  children: [
+  {
     id: "2",
     name: "Front end development",
     data: {
-      relation: "<h4>...</h4>"
+      type: 'category',
+      level: 5,
+      active: true,
+      note: '',
+      desc: '',
+      url: ''
     },
     children: [{
       id: "2_1",
       name: "Web based applications",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'category',
+        level: 5,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: [{
         id: "2_1_1",
         name: "Multi-platform Frameworks",
         data: {
-          relation: "<h4>...</h4>"
+          type: 'category',
+          level: 3,
+          active: true,
+          note: '',
+          desc: '',
+          url: ''
         },
         children: [{
           id: "2_1_1_1",
@@ -38,7 +76,12 @@ var techs_json = {
       id: "2_2",
       name: "Native applications",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'category',
+        level: 4,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: [{
         id: "2_2_1",
@@ -55,7 +98,12 @@ var techs_json = {
           id: "2_2_1_1",
           name: "JUCE",
           data: {
-            relation: "<h4>...</h4>"
+            type: 'library',
+            level: 4,
+            active: true,
+            note: '',
+            desc: '',
+            url: ''
           },
           children: []
         }]
@@ -65,20 +113,47 @@ var techs_json = {
     id: "3",
     name: "Back end development",
     data: {
-      relation: "<h4>...</h4>"
+      type: 'category',
+      level: 5,
+      active: true,
+      note: '',
+      desc: '',
+      url: ''
     },
     children: [{
       id: "3_1",
       name: "Server Side",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'category',
+        level: 5,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
-      children: []
+      children: [{
+        id: "3_1_1",
+        name: "Apache",
+        data: {
+          type: 'application',
+          level: 5,
+          active: true,
+          note: '',
+          desc: '',
+          url: ''
+        },
+        children: []
+      }]
     }, {
       id: "3_2",
       name: "Client Side",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'category',
+        level: 5,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: []
     }]
@@ -86,47 +161,81 @@ var techs_json = {
     id: "4",
     name: "Generic Knowledge",
     data: {
-      relation: "<h4>...</h4>"
+      type: 'category',
+      level: 5,
+      active: true,
+      note: '',
+      desc: '',
+      url: ''
     },
     children: [{
       id: "4_1",
       name: "Search Engine Optimisation (SEO)",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'skill',
+        level: 4,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: []
     }, {
       id: "4_2",
       name: "Regular Expressions",
       data: {
-        type: 'aptitude',
-        relation: "<h4>...</h4>"
+        type: 'skill',
+        level: 5,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: []
     }, {
       id: "4_3",
       name: "Databases",
       data: {
-        relation: "<h4>...</h4>"
+        type: 'category',
+        level: 5,
+        active: true,
+        note: '',
+        desc: '',
+        url: ''
       },
       children: [{
         id: "4_3_1",
         name: "MongoDB",
         data: {
-          relation: "<h4>...</h4>"
+          type: 'language', //so, what?
+          level: 5,
+          active: true,
+          note: 'Replica sets, sharding, query optimization, etc.',
+          desc: '',
+          url: ''
         },
         children: []
       }, {
         id: "4_3_2",
         name: "Redis",
         data: {
-          relation: "<h4>...</h4>"
+          type: 'language',
+          level: 2,
+          active: true,
+          note: '',
+          desc: '',
+          url: ''
         },
         children: []
       }]
     }]
   }],
   data: {
-    relation: "<h4>Root node</h4>"
+    type: 'default',
+    level: 1,
+    active: true,
+    note: '',
+    desc: '',
+    url: 'https://github.com/Theadd'
   }
 };

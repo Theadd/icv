@@ -30,9 +30,21 @@
   -ms-user-select: none;
   user-select: none;
   padding: 15px 0 15px 0;
-  /*&:hover {
-      font-size: 2.0em;
-    }*/
+}
+#interactive-cv .node.icv-level-5 {
+  font-size: 20px;
+}
+#interactive-cv .node.icv-level-4 {
+  font-size: 18px;
+}
+#interactive-cv .node.icv-level-3 {
+  font-size: 16px;
+}
+#interactive-cv .node.icv-level-2 {
+  font-size: 14px;
+}
+#interactive-cv .node.icv-level-2 {
+  font-size: 12px;
 }
 #interactive-cv .node .expansion {
   display: none;
@@ -180,56 +192,6 @@
   font-family: 'Frijole', Verdana;
   text-shadow: 2px 2px 2px black;
 }
-#interactive-cv.icv-theme-soapbubble .node.icv-level-5,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-5 {
-  font-size: 20px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-5 .inline-expansion .icv-experience,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-5 .inline-expansion .icv-experience {
-  width: 20px;
-  height: 20px;
-  background-size: 20px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-4,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-4 {
-  font-size: 18px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-4 .inline-expansion .icv-experience,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-4 .inline-expansion .icv-experience {
-  width: 18px;
-  height: 18px;
-  background-size: 18px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-3,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-3 {
-  font-size: 16px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-3 .inline-expansion .icv-experience,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-3 .inline-expansion .icv-experience {
-  width: 16px;
-  height: 16px;
-  background-size: 16px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-2,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-2 {
-  font-size: 14px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-2 .inline-expansion .icv-experience,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-2 .inline-expansion .icv-experience {
-  width: 14px;
-  height: 14px;
-  background-size: 14px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-2,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-2 {
-  font-size: 12px;
-}
-#interactive-cv.icv-theme-soapbubble .node.icv-level-2 .inline-expansion .icv-experience,
-#interactive-cv.icv-theme-reversesoapbubble .node.icv-level-2 .inline-expansion .icv-experience {
-  width: 12px;
-  height: 12px;
-  background-size: 12px;
-}
 #interactive-cv.icv-theme-soapbubble .node .expansion,
 #interactive-cv.icv-theme-reversesoapbubble .node .expansion {
   font-family: Verdana;
@@ -238,8 +200,4 @@
   font-size: 11px;
   padding: 0 18px;
   text-shadow: 1px 1px 1px black;
-}
-#interactive-cv.icv-theme-soapbubble .node .inline-expansion,
-#interactive-cv.icv-theme-reversesoapbubble .node .inline-expansion {
-  font-family: Verdana;
 }
