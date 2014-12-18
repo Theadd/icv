@@ -232,6 +232,8 @@ ICVGraph.prototype.morph = function (id, callback) {
 
   callback = callback || function () {};
 
+  console.debug("morph:"+id);
+
   if (!(node || false)) {
     self._morph(id, function () {
       callback();
@@ -246,6 +248,8 @@ ICVGraph.prototype.morph = function (id, callback) {
 
 ICVGraph.prototype._morph = function (id, callback) {
   var self = this;
+
+  console.debug("_morph:"+id);
 
   self.setBusy(true);
   //get graph to morph to.
@@ -301,46 +305,54 @@ ICVGraph.prototype.getGenerator = function () {
 ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
   var self = this;
 
-  $(domElement).addClass('working in').promise().done(function () {
-    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'}),
-      dim = (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim');
+  callback = callback || function () {};
 
-    callback = callback || function () {};
+  console.debug("_mouseEnterOnNode:"+node.id);
 
-    node.setData('dim', node.getData('dim'), 'start');
-    node.setData('dim', dim, 'end');
+  if ($(domElement).hasClass('open')) {
+    return callback(true);
+  } else {
+    $(domElement).addClass('working in').promise().done(function () {
+      var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'}),
+        dim = (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim');
 
-    if (!(node.data._eventHandler || false)) {
-      node.data._eventHandler = new ICVEventHandler(domElement, node);
-    }
 
-    self.rgraph.fx.animate({
-      modes: ['node-property:dim'],
-      duration: 500,
-      transition: $jit.Trans.Bounce.easeIn,
-      onComplete: node.data._eventHandler.mouseEnterOnNode(500, function () {
 
-        $(domElement).addClass('open').removeClass('working in').promise().done(function () {
-          self.rgraph.plot();
+      node.setData('dim', node.getData('dim'), 'start');
+      node.setData('dim', dim, 'end');
 
-          $('.tooltip').tooltipster({
-            trigger: 'click',
-            interactive: true,
-            contentAsHTML: true,
-            animation: 'grow',
-            minWidth: 100,
-            maxWidth: 300,
-            position: 'right'
-          });    //TODO: maybe its not required here but after loading json
-          callback(false);
-        });
-      }, function () {
-        //callback on break
-        $(domElement).removeClass('open in');
-        callback(true);
-      })
+      if (!(node.data._eventHandler || false)) {
+        node.data._eventHandler = new ICVEventHandler(domElement, node);
+      }
+
+      self.rgraph.fx.animate({
+        modes: ['node-property:dim'],
+        duration: 500,
+        transition: $jit.Trans.Bounce.easeIn,
+        onComplete: node.data._eventHandler.mouseEnterOnNode(500, function () {
+
+          $(domElement).addClass('open').removeClass('working in').promise().done(function () {
+            self.rgraph.plot();
+
+            $('.tooltip').tooltipster({
+              trigger: 'click',
+              interactive: true,
+              contentAsHTML: true,
+              animation: 'grow',
+              minWidth: 100,
+              maxWidth: 300,
+              position: 'right'
+            });    //TODO: maybe its not required here but after loading json
+            callback(false);
+          });
+        }, function () {
+          //callback on break
+          $(domElement).removeClass('open in');
+          callback(true);
+        })
+      });
     });
-  });
+  }
 }
 
 ICVGraph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
@@ -357,7 +369,7 @@ ICVGraph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
     node.setData('dim', dim, 'end');
 
     if (!(node.data._eventHandler || false)) {
-      console.error("node.data._eventHandler should exist!");
+      console.debug("node.data._eventHandler should exist!");
       node.data._eventHandler = new ICVEventHandler(domElement, node);
     }
 
@@ -481,21 +493,32 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
   callback = callback || function () {};
 
+  console.debug("setRootNode:"+node.id);
+
   if (!self.isBusy() && self.rgraph.root != node.id) {
     self.setBusy(true);
     self._rootId = node.id;
 
-    var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
+    console.debug("\tIN setRootNode:"+node.id);
+
+    var rootNodeDomElement = self.getNodeElement(self.rgraph.root);
     if (rootNodeDomElement.length) {
+      console.debug("\tIN setRootNode:"+node.id+" GOT NODE ELEMENT");
       self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
 
+        console.debug("\tIN setRootNode CALLBACK OF _mouseLeaveOnNode:"+self.rgraph.root);
         self.animatedCanvasTranslate(500);
         self.rgraph.onClick(node.id, {
           hideLabels: false,
           duration: 500,
           onComplete: function () {
+            console.debug("callback self.rgraph.onClick:"+node.id);
+
             self.setBusy(false);
-            return callback(null, node);
+
+            self._mouseEnterOnNode(self.getNodeElement(node.id), node, function () {
+              return callback(null, node);
+            });
           }
         });
       })
@@ -507,6 +530,10 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
 ICVGraph.prototype.getNode = function (id) {
   return this.rgraph.graph.getNode(id);
+}
+
+ICVGraph.prototype.getNodeElement = function (id) {
+  return $('#' + this._container + ' #' + id + '.node').first();
 }
 
 ICVGraph.prototype.centerNodeFromHash = function () {
