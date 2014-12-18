@@ -90,11 +90,34 @@ function ICVGraph (container_id, force_theme) {
 
     Events: {
       enable: true,
+      type: self.getGenerator().getConfig('nativeEvents') ? 'Native' : 'auto',
       onMouseEnter: function (node, eventInfo, e) {
+        if (self.getGenerator().getConfig('nativeEvents')) {
 
+          if (self.isBusy()) {
+            $jit.util.event.stop(e);
+          } else {
+            node.setData('state', 'open');
+            self._mouseEnterOnNode(self.getNodeElement(node.id), node, function (err) {
+
+            });
+          }
+        }
       },
       onMouseLeave: function (node, eventInfo, e) {
+        if (self.getGenerator().getConfig('nativeEvents')) {
 
+          if (self.isBusy()) {
+            $jit.util.event.stop(e);
+          } else {
+            if (self.rgraph.root != node.id) {
+              node.setData('state', 'normal');
+              self._mouseLeaveOnNode(self.getNodeElement(node.id), node, function (err) {
+
+              });
+            }
+          }
+        }
       },
       onDragEnd: function(node, eventInfo, e){
         $jit.util.event.stop(e);
@@ -135,25 +158,29 @@ function ICVGraph (container_id, force_theme) {
       };
 
       domElement.onmouseenter = function (e) {
-        if (self.isBusy()) {
-          $jit.util.event.stop(e);
-        } else {
-          node.setData('state', 'open');
-          self._mouseEnterOnNode(domElement, node, function (err) {
+        if (!self.getGenerator().getConfig('nativeEvents')) {
+          if (self.isBusy()) {
+            $jit.util.event.stop(e);
+          } else {
+            node.setData('state', 'open');
+            self._mouseEnterOnNode(domElement, node, function (err) {
 
-          });
+            });
+          }
         }
       };
 
       domElement.onmouseleave = function (e) {
-        if (self.isBusy()) {
-          $jit.util.event.stop(e);
-        } else {
-          if (self.rgraph.root != node.id) {
-            node.setData('state', 'normal');
-            self._mouseLeaveOnNode(domElement, node, function (err) {
+        if (!self.getGenerator().getConfig('nativeEvents')) {
+          if (self.isBusy()) {
+            $jit.util.event.stop(e);
+          } else {
+            if (self.rgraph.root != node.id) {
+              node.setData('state', 'normal');
+              self._mouseLeaveOnNode(domElement, node, function (err) {
 
-            });
+              });
+            }
           }
         }
       };
@@ -232,8 +259,6 @@ ICVGraph.prototype.morph = function (id, callback) {
 
   callback = callback || function () {};
 
-  console.debug("morph:"+id);
-
   if (!(node || false)) {
     self._morph(id, function () {
       callback();
@@ -248,8 +273,6 @@ ICVGraph.prototype.morph = function (id, callback) {
 
 ICVGraph.prototype._morph = function (id, callback) {
   var self = this;
-
-  console.debug("_morph:"+id);
 
   self.setBusy(true);
   //get graph to morph to.
@@ -306,8 +329,6 @@ ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
   var self = this;
 
   callback = callback || function () {};
-
-  console.debug("_mouseEnterOnNode:"+node.id);
 
   if ($(domElement).hasClass('open')) {
     return callback(true);
@@ -493,27 +514,19 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
   callback = callback || function () {};
 
-  console.debug("setRootNode:"+node.id);
-
   if (!self.isBusy() && self.rgraph.root != node.id) {
     self.setBusy(true);
     self._rootId = node.id;
 
-    console.debug("\tIN setRootNode:"+node.id);
-
     var rootNodeDomElement = self.getNodeElement(self.rgraph.root);
     if (rootNodeDomElement.length) {
-      console.debug("\tIN setRootNode:"+node.id+" GOT NODE ELEMENT");
       self._mouseLeaveOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
 
-        console.debug("\tIN setRootNode CALLBACK OF _mouseLeaveOnNode:"+self.rgraph.root);
         self.animatedCanvasTranslate(500);
         self.rgraph.onClick(node.id, {
           hideLabels: false,
           duration: 500,
           onComplete: function () {
-            console.debug("callback self.rgraph.onClick:"+node.id);
-
             self.setBusy(false);
 
             self._mouseEnterOnNode(self.getNodeElement(node.id), node, function () {

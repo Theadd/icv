@@ -82,7 +82,11 @@ var ICVStyle = {
       "config": {
         "backgroundColor": 'transparent',
         "stickBackgroundImage": true,
-        "centerNodeOnHashChange": false
+        "centerNodeOnHashChange": false,
+        /** Whether use the custom ‘Native’ canvas Event System of the library or to attach
+         *  the events onto the HTML labels (via event delegation).
+         */
+        "nativeEvents": false
       }
     },
 
@@ -358,7 +362,8 @@ var ICVStyle = {
           }
         },
         "config": {
-          "centerNodeOnHashChange": true
+          "centerNodeOnHashChange": true,
+          "nativeEvents": true
         }
       };
 

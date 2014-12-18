@@ -12,6 +12,7 @@
     font-family: 'Frijole', Verdana, sans-serif;
     text-shadow: 2px 2px 2px black;
     z-index: 1;
+    pointer-events: none;
 
     &:not(.open) {
 
@@ -69,6 +70,10 @@
       font-size: 11px;
       padding: 0 18px;
       text-shadow: 1px 1px 1px black;
+
+      .icv-btn {
+        pointer-events: auto;
+      }
     }
 
   }
