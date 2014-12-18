@@ -1,3 +1,4 @@
+
 /**
  *
  * @param sParam
@@ -15,15 +16,23 @@ function GetURLParameter (sParam) {
   }
 }
 
-$(document).ready(function(){
-  $("#interactive-cv").height($(window).height());
-  graph = new ICVGraph('interactive-cv', GetURLParameter('theme') || null);
-  graph.load(techs_json, function() {
-    graph.bindKeyShortcuts();
-    bindUIEvents();
+var icvInstance;
 
-    graph.centerNodeFromHash();
+$(document).ready(function(){
+
+  $("#interactive-cv").height($(window).height());
+
+  icvInstance = new $icv.Instance({
+    "containerId": "interactive-cv",
+    "theme": GetURLParameter('theme') || null
   });
+
+  icvInstance.initialize();
+
+  icvInstance.load(techs_json, function () {
+    console.log("Loaded!");
+  });
+
 });
 
 

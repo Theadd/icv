@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: "Lucida Grande", Verdana;
+  font-family: "Lucida Grande", Verdana, sans-serif;
   font-size: 0.9em;
   text-align: center;
   background-color: #F2F2F2;
@@ -37,7 +37,7 @@ a {
 .text {
   margin: 7px;
 }
-/*TOOLTIPS*/
+/*InfoVis Tooltips (Unused)*/
 .tip {
   color: #111;
   width: 139px;

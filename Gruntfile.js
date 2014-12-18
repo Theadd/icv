@@ -31,6 +31,45 @@ module.exports = function(grunt) {
           skipModuleInsertion: true
         }
       }
+    },
+    watch: {
+      scripts: {
+        files: ['src/js/*.js'],
+        tasks: ['requirejs'],
+        options: {
+          spawn: false,
+          interrupt: true
+        }
+      },
+      styles: {
+        files: ['src/less/**'],
+        tasks: ['less'],
+        options: {
+          spawn: true,
+          interrupt: true
+        }
+      }
+    },
+    less: {
+      development: {
+        options: {
+          paths: ["src/less"]
+        },
+        files: {
+          "assets/css/icv.css": "src/less/icv.less",
+          "assets/css/base.css": "src/less/base.less"
+        }
+      },
+      production: {
+        options: {
+          paths: ["src/less"],
+          compress: true
+        },
+        files: {
+          "assets/css/icv.min.css": "src/less/icv.less",
+          "assets/css/base.min.css": "src/less/base.less"
+        }
+      }
     }
   });
 
@@ -38,7 +77,9 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
-  grunt.registerTask('default', ['requirejs']);
+  grunt.registerTask('default', ['requirejs', 'watch', 'less']);
 
 };

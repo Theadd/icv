@@ -4,32 +4,47 @@ window.$icv = {};
 
 $icv.version = '0.1.0';
 
+$icv.Instance = Instance;
+
 /**
  *
- * @param sParam
- * @returns {*}
+ * @param opt {Object} with the following values: { (REQUIRED) containerId: 'domElementId', theme: 'themeName', bindKeyShortcuts: boolean }.
+ *
+ * @returns {Instance}
  * @constructor
  */
-var GetURLParameter = function (sParam) {
-  var sPageURL = window.location.search.substring(1);
-  var sURLVariables = sPageURL.split('&');
-  for (var i = 0; i < sURLVariables.length; ++i) {
-    var sParameterName = sURLVariables[i].split('=');
-    if (sParameterName[0] == sParam) {
-      return sParameterName[1];
-    }
-  }
+function Instance (opt) {
+  var self = this;
+  if (!(self instanceof Instance)) return new Instance(opt || {});
+
+  self._opt = $.extend(true, {}, { "theme": null, "bindKeyShortcuts": true }, opt || {});
+  self._graph = false;
 }
 
-$(document).ready(function(){
-  $("#interactive-cv").height($(window).height());
-  var graph = new $icv.Graph('interactive-cv', GetURLParameter('theme') || null);
-  graph.load(techs_json, function() {
-    graph.bindKeyShortcuts();
-    $icv.bindUIEvents(graph);
+Instance.prototype.initialize = function () {
+  var self = this;
 
-    graph.centerNodeFromHash();
+  self._graph = new $icv.Graph(self.getOption('containerId'), self.getOption('theme') || null);
+};
+
+Instance.prototype.load = function (json, callback) {
+  var self = this;
+
+  callback = callback || function () {};
+
+  self._graph.load(json, function() {
+    if (self.getOption('bindKeyShortcuts') || false) {
+      self._graph.bindKeyShortcuts();
+    }
+
+    $icv.bindUIEvents(self._graph);
+
+    self._graph.centerNodeFromHash();
+    callback();
   });
-});
+};
 
+Instance.prototype.getOption = function (optionName) {
+  return this._opt[optionName] || null;
+};
 
