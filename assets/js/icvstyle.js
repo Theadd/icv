@@ -25,7 +25,10 @@ var ICVStyle = {
             "extended": {
               "radialGradient": false,
               /** Draw multiple node borders for each level of experience if
-               * 'true' or specify the number of circles to draw. */
+               * 'true' or specify the number of circles to draw.
+               *
+               * It can be a function, with node as argument, returning one of those values.
+               */
               "multipleCircleWaves": false,
               "centerOnClick": true,
               /** Increase node name based on data.level value. */
@@ -248,6 +251,118 @@ var ICVStyle = {
       };
 
       return $.extend(true, {}, ICVStyle.theme.default, reversesoapbubble);
+    }),
+
+    /** Chemical Theme. */
+    "chemical": (function () {
+      var colorList = [/*Lightblue*/'#a4bde3' , /*Yellow*/'#e3e3a4', /*Green*/'#4e7844', /*Red*/ '#e67070', /*Blue*/'#445978', /*Orange*/ '#e6b770', /*Cyan*/'#70dee6'];
+
+      var chemical = {
+        nodeType: {
+          default: {
+            normal: {
+              CanvasStyles: {
+                strokeStyle: '#fff',
+                lineWidth: 1
+              },
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[0],
+                  "0.5": '#000'
+                },
+                "centerOnClick": false,
+                "removeCenterButton": false,
+                "multipleCircleWaves": function (node) {
+                  return (node.data && node.data.active) ? 2 : 1;
+                },
+                "levelBasedNameSize": false,
+                "edgeColor": '#fff',
+                /** When not false, overwrites default node dimension with the returned value of a function. */
+                "dim": function (node) {
+                  return (Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1) - 1) * 7 + 15
+                }
+              }
+            },
+            open: {
+              dim: 92,
+              "extended": {
+                "dim": false
+              }
+            }
+          },
+          category: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[0],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": false
+              }
+            }
+          },
+          framework: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[2],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          language: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[4],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          skill: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[6],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          library: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[2],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          },
+          application: {
+            normal: {
+              "extended": {
+                "radialGradient": {
+                  "0": colorList[3],
+                  "0.5": '#000'
+                },
+                "levelBasedNameSize": true
+              }
+            }
+          }
+        },
+        "config": {
+          "centerNodeOnHashChange": true
+        }
+      };
+
+      return $.extend(true, {}, ICVStyle.theme.default, chemical);
     })
 
   }
@@ -256,3 +371,4 @@ var ICVStyle = {
 ICVStyle.theme.flatline = ICVStyle.theme.flatline();
 ICVStyle.theme.soapbubble = ICVStyle.theme.soapbubble();
 ICVStyle.theme.reversesoapbubble = ICVStyle.theme.reversesoapbubble();
+ICVStyle.theme.chemical = ICVStyle.theme.chemical();

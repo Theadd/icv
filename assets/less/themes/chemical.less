@@ -1,0 +1,67 @@
+
+
+.icv-theme-chemical() {
+  //background-color: #1c1d21;
+  background-image: url("../img/bg.png");
+
+  #interactive-cv-canvas {
+    opacity: 0.5;
+  }
+
+  .node {
+    font-family: 'Frijole', Verdana, sans-serif;
+    text-shadow: 2px 2px 2px black;
+    z-index: 1;
+    //background-color: rgba(255, 0, 0, 0.2);
+
+    &:not(.open)/*, &:not(.working.out)*/ {
+      &.icv-level-5 {
+        font-size: 20px;
+      }
+
+      &.icv-level-4 {
+        font-size: 18px;
+      }
+
+      &.icv-level-3 {
+        font-size: 16px;
+        opacity: 0.8;
+      }
+
+      &.icv-level-2 {
+        font-size: 14px;
+        opacity: 0.6;
+      }
+
+      &.icv-level-1 {
+        font-size: 12px;
+        opacity: 0.4;
+      }
+    }
+
+    &.open {
+      font-size: 14px;
+      z-index: 2;
+
+      &.icv-level-5, &.icv-level-4, &.icv-level-3, &.icv-level-2, &.icv-level-1 {
+        font-size: 14px;
+      }
+    }
+
+    &.working{
+      opacity: 0;
+    }
+
+
+    .expansion {
+      font-family: Verdana, sans-serif;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: normal;
+      font-size: 11px;
+      padding: 0 18px;
+      text-shadow: 1px 1px 1px black;
+    }
+
+  }
+}
+

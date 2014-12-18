@@ -17,6 +17,7 @@
 
 @import 'themes/default';
 @import 'themes/soapbubble';
+@import 'themes/chemical';
 
 #interactive-cv {
   position: relative;
@@ -33,7 +34,7 @@
     font-weight: bold;
     max-width: 200px;
     font-size: 13px;
-    font-family: Verdana;
+    font-family: Verdana, sans-serif;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -58,7 +59,7 @@
       font-size: 14px;
     }
 
-    &.icv-level-2 {
+    &.icv-level-1 {
       font-size: 12px;
     }
 
@@ -66,7 +67,7 @@
     .expansion {
       display: none;
       font-weight: normal;
-      font-family: Verdana;
+      font-family: Verdana, sans-serif;
       font-size: 11px;
       padding: 0 15px;
     }
@@ -155,6 +156,10 @@
 
   &.icv-theme-soapbubble, &.icv-theme-reversesoapbubble {
     .icv-theme-soapbubble;
+  }
+
+  &.icv-theme-chemical {
+    .icv-theme-chemical;
   }
 
 

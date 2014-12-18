@@ -87,11 +87,18 @@ $jit.RGraph.Plot.NodeTypes.implement({
     'render': function (node, canvas) {
       var pos = node.pos.getc(true),
         ctx = canvas.getCtx(),
-        dim = node.getData('dim'),
-        nodeType = graph.getGenerator().getNodeTypeFor(node.data.type || null),
+        nodeType = graph.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
         color = nodeType.color;
 
-      node.setData('color', color);
+      if (!(node.data._created || false)) {
+        node.setData('dim', (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim'));
+        node.data._created = true;
+
+      }
+
+      var dim = node.getData("dim");
+
+      //node.setData('color', color);
 
       if (nodeType.extended && typeof nodeType.extended.radialGradient === "object") {
         //RADIAL GRADIENT
@@ -116,11 +123,14 @@ $jit.RGraph.Plot.NodeTypes.implement({
       this.nodeHelper.circle.render('stroke', pos, dim, canvas);
 
       if (nodeType.extended && nodeType.extended.multipleCircleWaves) {
-        var waves = 1
-        if (typeof nodeType.extended.multipleCircleWaves === "boolean") {
+        var waves = 1,
+          multipleCircleWaves = (typeof nodeType.extended.multipleCircleWaves === "function") ?
+            nodeType.extended.multipleCircleWaves(node) : nodeType.extended.multipleCircleWaves;
+
+        if (typeof multipleCircleWaves === "boolean") {
           waves = Math.max(Math.min(Math.round(parseInt(node.data.level || '1')), 5), 1);
-        } else if (typeof nodeType.extended.multipleCircleWaves === "number") {
-          waves = nodeType.extended.multipleCircleWaves
+        } else if (typeof multipleCircleWaves === "number") {
+          waves = multipleCircleWaves
         }
 
         for (; waves > 1; --waves) {
@@ -139,6 +149,22 @@ $jit.RGraph.Plot.NodeTypes.implement({
 });
 
 $jit.RGraph.Plot.EdgeTypes.implement({
+
+  //Code to render lines - dim of node
+/*'render': function(adj, canvas) {
+  var from = adj.nodeFrom.pos.getc(true),
+    to = adj.nodeTo.pos.getc(true),
+    dim = adj.getData('dim'),
+    direction = adj.data.$direction,
+    inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id),
+    arrowPosition = this.edge.arrowPosition || 'end';
+  this.edgeHelper.arrow.render(from, to, dim, inv, canvas, arrowPosition);
+},
+'contains': function(adj, pos) {
+  var from = adj.nodeFrom.pos.getc(true),
+    to = adj.nodeTo.pos.getc(true);
+  return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
+}*/
 
   'custom': {
     'render': function(adj, canvas) {

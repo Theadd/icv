@@ -86,10 +86,10 @@ function ICVGraph (container_id, force_theme) {
     Events: {
       enable: true,
       onMouseEnter: function (node, eventInfo, e) {
-        //console.log("enter");
+
       },
       onMouseLeave: function (node, eventInfo, e) {
-        //console.log("leave");
+
       },
       onDragEnd: function(node, eventInfo, e){
         $jit.util.event.stop(e);
@@ -134,7 +134,7 @@ function ICVGraph (container_id, force_theme) {
           $jit.util.event.stop(e);
         } else {
           node.setData('state', 'open');
-          self._mouseEnterOnNode(domElement, node, function (dE, n) {
+          self._mouseEnterOnNode(domElement, node, function (err) {
 
           });
         }
@@ -146,7 +146,7 @@ function ICVGraph (container_id, force_theme) {
         } else {
           if (self.rgraph.root != node.id) {
             node.setData('state', 'normal');
-            self._mouseLeaveOnNode(domElement, node, function (dE, n) {
+            self._mouseLeaveOnNode(domElement, node, function (err) {
 
             });
           }
@@ -233,21 +233,28 @@ ICVGraph.prototype.getGenerator = function () {
 ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
   var self = this;
 
-  $(domElement).addClass('working').promise().done(function () {
-    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'});
+  $(domElement).addClass('working in').promise().done(function () {
+    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'}),
+      dim = (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim');
 
     callback = callback || function () {};
+
     node.setData('dim', node.getData('dim'), 'start');
-    node.setData('dim', nodeType.dim, 'end');
+    node.setData('dim', dim, 'end');
+
+    if (!(node.data._eventHandler || false)) {
+      node.data._eventHandler = new ICVEventHandler(domElement, node);
+    }
 
     self.rgraph.fx.animate({
       modes: ['node-property:dim'],
       duration: 500,
       transition: $jit.Trans.Bounce.easeIn,
-      onComplete: function () {
+      onComplete: node.data._eventHandler.mouseEnterOnNode(500, function () {
 
-        $(domElement).addClass('open').removeClass('working').promise().done(function () {
+        $(domElement).addClass('open').removeClass('working in').promise().done(function () {
           self.rgraph.plot();
+
           $('.tooltip').tooltipster({
             trigger: 'click',
             interactive: true,
@@ -257,9 +264,13 @@ ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
             maxWidth: 300,
             position: 'right'
           });    //TODO: maybe its not required here but after loading json
-          callback(domElement, node);
+          callback(false);
         });
-      }
+      }, function () {
+        //callback on break
+        $(domElement).removeClass('open in');
+        callback(true);
+      })
     });
   });
 }
@@ -267,24 +278,30 @@ ICVGraph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
 ICVGraph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
   var self = this;
 
-  $(domElement).addClass('working').promise().done(function () {
-    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null);
+  $(domElement).addClass('working out').promise().done(function () {
+    var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null),
+      dim = (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim');
 
     callback = callback || function () {};
     $(domElement).removeClass('open');
 
     node.setData('dim', node.getData('dim'), 'start');
-    node.setData('dim', nodeType.dim, 'end');
+    node.setData('dim', dim, 'end');
+
+    if (!(node.data._eventHandler || false)) {
+      console.error("node.data._eventHandler should exist!");
+      node.data._eventHandler = new ICVEventHandler(domElement, node);
+    }
 
     self.rgraph.fx.animate({
       modes: ['node-property:dim'],
       duration: 500,
       transition: $jit.Trans.Bounce.easeOut,
-      onComplete: function () {
-        $(domElement).removeClass('working').promise().done(function () {
-          callback(domElement, node);
+      onComplete: node.data._eventHandler.mouseLeaveOnNode(500, function () {
+        $(domElement).removeClass('working out').promise().done(function () {
+          callback(false);
         });
-      }
+      })
     });
   });
 }
