@@ -8,6 +8,7 @@ function ICVGraph (container_id, force_theme) {
   self._busy = false;
   self._preventNextClick = false;
   self._mouseDragStartAt = { x: 0, y: 0 };
+  self._json = {};
 
 
   var labelType, useGradients, nativeTextSupport, animate,
@@ -46,6 +47,7 @@ function ICVGraph (container_id, force_theme) {
     //Where to append the visualization
     injectInto: self._container,
     levelDistance: 200,
+    interpolation: 'polar',
     //concentric circles.
     background: {
       CanvasStyles: {
@@ -196,6 +198,7 @@ ICVGraph.prototype.load = function (json, callback) {
   self.setBusy(true);
   //load JSON data
   self.rgraph.loadJSON(json);
+  self._json = json;
   //trigger small animation
   self.rgraph.graph.eachNode(function(n) {
     var pos = n.getPos();
@@ -216,6 +219,54 @@ ICVGraph.prototype.load = function (json, callback) {
       }
     }
   });
+}
+
+ICVGraph.prototype.morph = function (id, callback) {
+  var self = this,
+    node = self.getNode(id);
+
+  callback = callback || function () {};
+
+  self.setRootNode(node, function () {
+    self.setBusy(true);
+    //get graph to morph to.
+    var subGraph = self.recursiveGetTree(self._json, id);
+
+    console.log(JSON.stringify(subGraph, null, '  '));
+
+    //perform morphing animation.
+    self.rgraph.op.morph(subGraph, {
+      type: 'fade:con',
+      fps: 40,
+      duration: 3000,
+      hideLabels: false,
+      onComplete: function () {
+        self.setBusy(false);
+        callback();
+      }
+    });
+  });
+
+}
+
+ICVGraph.prototype.recursiveGetTree = function (json, id) {
+  var self = this, found = false;
+
+  for (var i = 0; i < json.children.length; ++i) {
+    var child = json.children[i];
+    if (child.id == id) {
+      return child;
+    } else {
+      if (child.children.length) {
+        found = self.recursiveGetTree(child, id);
+        if (found) {
+          return found;
+        }
+      }
+    }
+  }
+
+  return false;
 }
 
 ICVGraph.prototype.isBusy = function () {

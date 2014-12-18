@@ -11,6 +11,12 @@ function bindUIEvents() {
 
       }
 
+      if ($(this).hasClass('icv-btn-zoom')) {
+        ev.preventDefault();
+        var id = $(this).closest('.node').attr('id');
+        graph.morph(id);
+      }
+
       if ($(this).hasClass('icv-btn-desc')) {
         ev.preventDefault();
       }
