@@ -8,13 +8,14 @@ function bindUIEvents() {
 
     } else {
       if ($(this).hasClass('icv-btn-root')) {
-
+        ev.preventDefault();
+        graph.setHash(null, $(this).attr('href').substr(1));
       }
 
       if ($(this).hasClass('icv-btn-zoom')) {
         ev.preventDefault();
-        var id = $(this).closest('.node').attr('id');
-        graph.morph(id);
+        var id = $(this).attr('href').substr(1);
+        graph.setHash(id, id);
       }
 
       if ($(this).hasClass('icv-btn-desc')) {

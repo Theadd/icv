@@ -10,6 +10,9 @@ function ICVGraph (container_id, force_theme) {
   self._mouseDragStartAt = { x: 0, y: 0 };
   self._json = {};
 
+  self._zoomId = false;
+  self._rootId = false;
+
 
   var labelType, useGradients, nativeTextSupport, animate,
     container = $('#' + self._container),
@@ -209,8 +212,10 @@ ICVGraph.prototype.load = function (json, callback) {
     modes:['polar'],
     duration: 1000,
     onComplete: function() {
+      self._zoomId = self.rgraph.root;
       //automatically open root node
       var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
+
       if (rootNodeDomElement.length) {
         self._mouseEnterOnNode(rootNodeDomElement, self.rgraph.graph.getNode(self.rgraph.root), function () {
           self.setBusy(false);
@@ -227,24 +232,36 @@ ICVGraph.prototype.morph = function (id, callback) {
 
   callback = callback || function () {};
 
-  self.setRootNode(node, function () {
-    self.setBusy(true);
-    //get graph to morph to.
-    var subGraph = self.recursiveGetTree(self._json, id);
-
-    console.log(JSON.stringify(subGraph, null, '  '));
-
-    //perform morphing animation.
-    self.rgraph.op.morph(subGraph, {
-      type: 'fade:con',
-      fps: 40,
-      duration: 3000,
-      hideLabels: false,
-      onComplete: function () {
-        self.setBusy(false);
-        callback();
-      }
+  if (!(node || false)) {
+    self._morph(id, function () {
+      callback();
+    })
+  } else {
+    self.setRootNode(node, function () {
+      self._morph(id, callback);
     });
+  }
+
+}
+
+ICVGraph.prototype._morph = function (id, callback) {
+  var self = this;
+
+  self.setBusy(true);
+  //get graph to morph to.
+  var subGraph = (id == self._json.id) ? self._json : self.recursiveGetTree(self._json, id);
+
+  //perform morphing animation.
+  self.rgraph.op.morph(subGraph, {
+    type: 'fade:con',
+    fps: 40,
+    duration: 3000,
+    hideLabels: false,
+    onComplete: function () {
+      self.setBusy(false);
+      self._zoomId = id;
+      callback();
+    }
   });
 
 }
@@ -466,6 +483,7 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
 
   if (!self.isBusy() && self.rgraph.root != node.id) {
     self.setBusy(true);
+    self._rootId = node.id;
 
     var rootNodeDomElement = $('#' + self._container + ' #' + self.rgraph.root + '.node').first();
     if (rootNodeDomElement.length) {
@@ -482,20 +500,43 @@ ICVGraph.prototype.setRootNode = function (node, callback) {
         });
       })
     }
+  } else {
+    return callback(true, node);
   }
 }
 
 ICVGraph.prototype.getNode = function (id) {
-  return this.rgraph.graph.getNode(id)
+  return this.rgraph.graph.getNode(id);
 }
 
 ICVGraph.prototype.centerNodeFromHash = function () {
-  var self = this, foundId = location.hash.replace(/^#/, '');
+  var self = this, hash = location.hash.replace(/^#/, '');
 
-  if (foundId.length && foundId != location.hash) {
-    var node = self.getNode(foundId);
-    if (node) {
-      self.setRootNode(node);
+  if (hash.length && hash != location.hash) {
+    var ids = hash.split('|');
+    if (ids[0] != self._zoomId) {
+      self.morph(ids[0], function () {
+        if (ids[1] != self._rootId) {
+          self.setRootNode(self.getNode(ids[1]));
+        }
+      });
+    } else {
+      if (ids[1] != self._rootId) {
+        self.setRootNode(self.getNode(ids[1]));
+      }
     }
+  } else {
+    self._rootId = self.rgraph.root;
+    self.setHash(self._zoomId, self._rootId);
   }
+}
+
+
+ICVGraph.prototype.setHash = function (zoomId, rootId) {
+  var self = this;
+
+  zoomId = zoomId || self._zoomId;
+  rootId = rootId || self._rootId;
+
+  location.hash = '#' + zoomId + '|' + rootId;
 }

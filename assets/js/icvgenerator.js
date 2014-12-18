@@ -22,7 +22,7 @@ ICVGenerator.prototype.buildNodeElement = function (element, node) {
 
     expansion += '<span class="icv-note">' + (node.data.note || '') + '</span><br />';
 
-    expansion += '<a href="#" class="icv-btn icv-btn-zoom" title="Zoom"><i class="fa fa-fw fa-search-plus"></i></a>';
+    expansion += '<a href="#' + node.id + '" class="icv-btn icv-btn-zoom"><i class="fa fa-fw fa-search-plus"></i></a>';
 
     if (!(nodeType.extended && nodeType.extended.removeCenterButton)) {
       expansion += '<a href="#' + node.id + '" class="icv-btn icv-btn-root"><i class="fa fa-fw fa-puzzle-piece"></i></a>';
