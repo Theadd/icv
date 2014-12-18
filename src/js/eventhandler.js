@@ -1,5 +1,5 @@
 
-$icv.bindUIEvents = function() {
+$icv.bindUIEvents = function(graph) {
 
   $("#interactive-cv").on("click", ".icv-btn", function (ev) {
 

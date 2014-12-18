@@ -23,10 +23,10 @@ var GetURLParameter = function (sParam) {
 
 $(document).ready(function(){
   $("#interactive-cv").height($(window).height());
-  graph = new $icv.Graph('interactive-cv', GetURLParameter('theme') || null);
+  var graph = new $icv.Graph('interactive-cv', GetURLParameter('theme') || null);
   graph.load(techs_json, function() {
     graph.bindKeyShortcuts();
-    $icv.bindUIEvents();
+    $icv.bindUIEvents(graph);
 
     graph.centerNodeFromHash();
   });

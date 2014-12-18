@@ -1,4 +1,3 @@
-var graph;
 
 $icv.Graph = function (container_id, force_theme) {
   var self = this;
@@ -218,6 +217,8 @@ $icv.Graph = function (container_id, force_theme) {
       }
     }
   });
+
+  self.rgraph._owner = self;
 }
 
 $icv.Graph.prototype.load = function (json, callback) {

@@ -23,10 +23,10 @@ var GetURLParameter = function (sParam) {
 
 $(document).ready(function(){
   $("#interactive-cv").height($(window).height());
-  graph = new $icv.Graph('interactive-cv', GetURLParameter('theme') || null);
+  var graph = new $icv.Graph('interactive-cv', GetURLParameter('theme') || null);
   graph.load(techs_json, function() {
     graph.bindKeyShortcuts();
-    $icv.bindUIEvents();
+    $icv.bindUIEvents(graph);
 
     graph.centerNodeFromHash();
   });
@@ -34,7 +34,7 @@ $(document).ready(function(){
 
 
 
-var graph;
+//var graph;
 
 $icv.Graph = function (container_id, force_theme) {
   var self = this;
@@ -254,6 +254,8 @@ $icv.Graph = function (container_id, force_theme) {
       }
     }
   });
+
+  self.rgraph._owner = self;
 }
 
 $icv.Graph.prototype.load = function (json, callback) {
@@ -708,7 +710,7 @@ $jit.RGraph.Plot.NodeTypes.implement({
     'render': function (node, canvas) {
       var pos = node.pos.getc(true),
         ctx = canvas.getCtx(),
-        nodeType = graph.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
+        nodeType = this.viz._owner.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
         color = nodeType.color;
 
       if (!(node.data._created || false)) {
@@ -791,7 +793,7 @@ $jit.RGraph.Plot.EdgeTypes.implement({
     'render': function(adj, canvas) {
       var from = adj.nodeFrom.pos.getc(true),
         to = adj.nodeTo.pos.getc(true),
-        nodeType = graph.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
+        nodeType = this.viz._owner.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
         color = (nodeType.extended && nodeType.extended.edgeColor) ? nodeType.extended.edgeColor : nodeType.color;
 
       adj.setData('color', color);
@@ -1199,7 +1201,7 @@ $icv.Style.theme.reversesoapbubble = $icv.Style.theme.reversesoapbubble();
 $icv.Style.theme.chemical = $icv.Style.theme.chemical();
 
 
-$icv.bindUIEvents = function() {
+$icv.bindUIEvents = function(graph) {
 
   $("#interactive-cv").on("click", ".icv-btn", function (ev) {
 

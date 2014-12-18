@@ -89,7 +89,7 @@ $jit.RGraph.Plot.NodeTypes.implement({
     'render': function (node, canvas) {
       var pos = node.pos.getc(true),
         ctx = canvas.getCtx(),
-        nodeType = graph.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
+        nodeType = this.viz._owner.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
         color = nodeType.color;
 
       if (!(node.data._created || false)) {
@@ -172,7 +172,7 @@ $jit.RGraph.Plot.EdgeTypes.implement({
     'render': function(adj, canvas) {
       var from = adj.nodeFrom.pos.getc(true),
         to = adj.nodeTo.pos.getc(true),
-        nodeType = graph.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
+        nodeType = this.viz._owner.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
         color = (nodeType.extended && nodeType.extended.edgeColor) ? nodeType.extended.edgeColor : nodeType.color;
 
       adj.setData('color', color);
