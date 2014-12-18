@@ -1,0 +1,12 @@
+{
+  "name": "icv",
+  "version": "0.1.0",
+  "description": "Interactive CV using JavaScript InfoVis Toolkit",
+  "main": "icv.js",
+  "author": "Theadd",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-requirejs": "^0.4.4"
+  }
+}
