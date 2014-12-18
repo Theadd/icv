@@ -26,7 +26,10 @@ module.exports = function(grunt) {
           //- "closure.keepLines": Same as closure option, but keeps line returns in the minified files.
           //- "none": no minification will be done.
           optimize: "none",
-          wrap: true,
+          wrap: {
+            startFile: "src/js/HEADER",
+            end: "}());"
+          },
           out: 'assets/js/icv.js',
           skipModuleInsertion: true
         }
