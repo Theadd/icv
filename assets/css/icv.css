@@ -25,7 +25,6 @@
   font-family: Verdana, sans-serif;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -116,10 +115,13 @@
 #interactive-cv.icv-theme-flatline #interactive-cv-canvas {
   opacity: 0.5;
 }
+#interactive-cv.icv-theme-default:not(.no-shadows) .node,
+#interactive-cv.icv-theme-flatline:not(.no-shadows) .node {
+  text-shadow: 2px 2px 2px black;
+}
 #interactive-cv.icv-theme-default .node,
 #interactive-cv.icv-theme-flatline .node {
   font-family: 'Frijole', Verdana, sans-serif;
-  text-shadow: 2px 2px 2px black;
 }
 #interactive-cv.icv-theme-default .node.icv-level-5,
 #interactive-cv.icv-theme-flatline .node.icv-level-5 {
@@ -187,10 +189,17 @@
 #interactive-cv.icv-theme-reversesoapbubble #interactive-cv-canvas {
   opacity: 0.5;
 }
+#interactive-cv.icv-theme-soapbubble:not(.no-shadows) .node,
+#interactive-cv.icv-theme-reversesoapbubble:not(.no-shadows) .node {
+  text-shadow: 2px 2px 2px black;
+}
+#interactive-cv.icv-theme-soapbubble:not(.no-shadows) .node .expansion,
+#interactive-cv.icv-theme-reversesoapbubble:not(.no-shadows) .node .expansion {
+  text-shadow: 1px 1px 1px black;
+}
 #interactive-cv.icv-theme-soapbubble .node,
 #interactive-cv.icv-theme-reversesoapbubble .node {
   font-family: 'Frijole', Verdana, sans-serif;
-  text-shadow: 2px 2px 2px black;
 }
 #interactive-cv.icv-theme-soapbubble .node .expansion,
 #interactive-cv.icv-theme-reversesoapbubble .node .expansion {
@@ -199,7 +208,6 @@
   font-weight: normal;
   font-size: 11px;
   padding: 0 18px;
-  text-shadow: 1px 1px 1px black;
 }
 #interactive-cv.icv-theme-chemical {
   background-image: url("../img/bg.png");
@@ -208,9 +216,14 @@
   filter: alpha(opacity=50);
   opacity: 0.5;
 }
+#interactive-cv.icv-theme-chemical:not(.no-shadows) .node {
+  text-shadow: 2px 2px 2px black;
+}
+#interactive-cv.icv-theme-chemical:not(.no-shadows) .node .expansion {
+  text-shadow: 1px 1px 1px black;
+}
 #interactive-cv.icv-theme-chemical .node {
   font-family: 'Frijole', Verdana, sans-serif;
-  text-shadow: 2px 2px 2px black;
   z-index: 1;
   pointer-events: none;
 }
@@ -261,7 +274,6 @@
   font-weight: normal;
   font-size: 11px;
   padding: 0 18px;
-  text-shadow: 1px 1px 1px black;
 }
 #interactive-cv.icv-theme-chemical .node .expansion .icv-btn {
   pointer-events: auto;

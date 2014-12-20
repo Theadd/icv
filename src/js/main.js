@@ -4,11 +4,32 @@ window.$icv = {};
 
 $icv.version = '0.1.0';
 
+$icv._callProfile = {
+  "onBeforePlotLine": 0,
+  "onPlaceLabel": 0,
+  "onCreateLabel": 0,
+  "recursiveGetTree": 0,
+  "_mouseEnterOnNode": 0,
+  "_mouseLeaveOnNode": 0,
+  "animatedCanvasTranslate": 0,
+  "translate": 0,
+  "renderEdgeTypes": 0,
+  "containsEdgeTypes": 0,
+  "renderNodeTypes": 0,
+  "containsNodeTypes": 0
+}
+
 $icv.Instance = Instance;
 
 /**
  *
- * @param opt {Object} with the following values: { (REQUIRED) containerId: 'domElementId', theme: 'themeName', bindKeyShortcuts: boolean }.
+ * @param opt {Object} with the following values: {
+ *  (REQUIRED) containerId: 'domElementId',
+ *  theme: 'themeName',
+ *  bindKeyShortcuts: boolean,
+ *  hideLabels: boolean,
+ *  noShadows: boolean
+ * }
  *
  * @returns {Instance}
  * @constructor

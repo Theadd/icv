@@ -8,9 +8,19 @@
     opacity: 0.5;
   }
 
+  &:not(.no-shadows) {
+    .node {
+      text-shadow: 2px 2px 2px black;
+
+      .expansion {
+        text-shadow: 1px 1px 1px black;
+      }
+    }
+  }
+
   .node {
     font-family: 'Frijole', Verdana, sans-serif;
-    text-shadow: 2px 2px 2px black;
+    //text-shadow: 2px 2px 2px black;
 
     .expansion {
       font-family: Verdana, sans-serif;
@@ -18,7 +28,7 @@
       font-weight: normal;
       font-size: 11px;
       padding: 0 18px;
-      text-shadow: 1px 1px 1px black;
+      //text-shadow: 1px 1px 1px black;
     }
 
   }

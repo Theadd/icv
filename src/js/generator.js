@@ -92,10 +92,11 @@ $jit.RGraph.Plot.NodeTypes.implement({
         nodeType = this.viz._owner.getGenerator().getNodeTypeFor(node.data.type || null/*, {"state": node.getData('state') || "normal"}*/),
         color = nodeType.color;
 
+      ++$icv._callProfile.renderNodeTypes; //FIXME
+
       if (!(node.data._created || false)) {
         node.setData('dim', (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim'));
         node.data._created = true;
-
       }
 
       var dim = node.getData("dim");
@@ -144,6 +145,8 @@ $jit.RGraph.Plot.NodeTypes.implement({
       var npos = node.pos.getc(true),
         dim = node.getData('dim');
 
+      ++$icv._callProfile.containsNodeTypes; //FIXME
+
       return this.nodeHelper.circle.contains(npos, pos, dim);
     }
   }
@@ -175,6 +178,7 @@ $jit.RGraph.Plot.EdgeTypes.implement({
         nodeType = this.viz._owner.getGenerator().getNodeTypeFor(adj.nodeTo.data.type || null),
         color = (nodeType.extended && nodeType.extended.edgeColor) ? nodeType.extended.edgeColor : nodeType.color;
 
+      ++$icv._callProfile.renderEdgeTypes; //FIXME
       adj.setData('color', color);
 
       this.edgeHelper.line.render(from, to, canvas);
@@ -192,6 +196,8 @@ $jit.RGraph.Plot.EdgeTypes.implement({
     'contains': function(adj, pos) {
       var from = adj.nodeFrom.pos.getc(true),
         to = adj.nodeTo.pos.getc(true);
+
+      ++$icv._callProfile.containsEdgeTypes; //FIXME
 
       return this.edgeHelper.line.contains(from, to, pos, this.edge.epsilon);
     }

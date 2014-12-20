@@ -8,6 +8,10 @@ $icv.Graph = function (container_id, force_theme) {
   self._preventNextClick = false;
   self._mouseDragStartAt = { x: 0, y: 0 };
   self._json = {};
+  //FIXME: get opt values for:
+  self._hideLabels = true;
+  self._unstickBackgroundImage = true;
+  self._fps = 20;
 
   self._zoomId = false;
   self._rootId = false;
@@ -49,7 +53,7 @@ $icv.Graph = function (container_id, force_theme) {
     //Where to append the visualization
     injectInto: self._container,
     levelDistance: 200,
-    interpolation: 'polar',
+    //interpolation: 'polar',
     //concentric circles.
     background: {
       CanvasStyles: {
@@ -135,6 +139,7 @@ $icv.Graph = function (container_id, force_theme) {
     //This method is called once, on label creation.
     onCreateLabel: function (domElement, node) {
 
+      ++$icv._callProfile.onCreateLabel; //FIXME
       self.getGenerator().buildNodeElement(domElement, node);
 
       node.setData('state', 'normal');
@@ -191,6 +196,8 @@ $icv.Graph = function (container_id, force_theme) {
     onPlaceLabel: function (domElement, node) {
       var style = domElement.style;
 
+      ++$icv._callProfile.onPlaceLabel; //FIXME
+
       var left = parseInt(style.left);
       var top = parseInt(style.top);
       var w = domElement.offsetWidth;
@@ -200,7 +207,8 @@ $icv.Graph = function (container_id, force_theme) {
     },
     onBeforePlotLine: function(adj) {
 
-      if (self._stickBackgroundImage) {
+      if (self._stickBackgroundImage && !self._unstickBackgroundImage) {
+        ++$icv._callProfile.onBeforePlotLine; //FIXME
         var bg_w = 260, bg_h = 260, background_pos_x = 30, background_pos_y = 30;
         var x = self.rgraph.canvas.translateOffsetX,
           y = self.rgraph.canvas.translateOffsetY,
@@ -238,7 +246,8 @@ $icv.Graph.prototype.load = function (json, callback) {
   self.rgraph.compute('end');
   self.rgraph.fx.animate({
     modes:['polar'],
-    duration: 1000,
+    duration: 3000,
+    hideLabels: self._hideLabels,
     onComplete: function() {
       self._zoomId = self.rgraph.root;
       //automatically open root node
@@ -282,9 +291,9 @@ $icv.Graph.prototype._morph = function (id, callback) {
   //perform morphing animation.
   self.rgraph.op.morph(subGraph, {
     type: 'fade:con',
-    fps: 40,
+    fps: self._fps,
     duration: 3000,
-    hideLabels: false,
+    hideLabels: self._hideLabels,
     onComplete: function () {
       self.setBusy(false);
       self._zoomId = id;
@@ -296,6 +305,8 @@ $icv.Graph.prototype._morph = function (id, callback) {
 
 $icv.Graph.prototype.recursiveGetTree = function (json, id) {
   var self = this, found = false;
+
+  ++$icv._callProfile.recursiveGetTree; //FIXME
 
   for (var i = 0; i < json.children.length; ++i) {
     var child = json.children[i];
@@ -334,6 +345,9 @@ $icv.Graph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
   if ($(domElement).hasClass('open')) {
     return callback(true);
   } else {
+
+    ++$icv._callProfile._mouseEnterOnNode; //FIXME
+
     $(domElement).addClass('working in').promise().done(function () {
       var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null, {state: 'open'}),
         dim = (nodeType.extended && nodeType.extended.dim) ? nodeType.extended.dim(node) : nodeType.dim || node.getData('dim');
@@ -356,7 +370,7 @@ $icv.Graph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
           $(domElement).addClass('open').removeClass('working in').promise().done(function () {
             self.rgraph.plot();
 
-            $('.tooltip').tooltipster({
+            /*$('.tooltip').tooltipster({
               trigger: 'click',
               interactive: true,
               contentAsHTML: true,
@@ -364,7 +378,7 @@ $icv.Graph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
               minWidth: 100,
               maxWidth: 300,
               position: 'right'
-            });    //TODO: maybe its not required here but after loading json
+            });*/    //TODO: maybe its not required here but after loading json
             callback(false);
           });
         }, function () {
@@ -379,6 +393,8 @@ $icv.Graph.prototype._mouseEnterOnNode = function (domElement, node, callback) {
 
 $icv.Graph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
   var self = this;
+
+  ++$icv._callProfile._mouseLeaveOnNode; //FIXME
 
   $(domElement).addClass('working out').promise().done(function () {
     var nodeType = self.getGenerator().getNodeTypeFor(node.data.type || null),
@@ -411,22 +427,25 @@ $icv.Graph.prototype._mouseLeaveOnNode = function (domElement, node, callback) {
 $icv.Graph.prototype.animatedCanvasTranslate = function (duration, callback) {
   var self = this;
 
+  ++$icv._callProfile.animatedCanvasTranslate; //FIXME
+
   var x = self.rgraph.canvas.translateOffsetX * -1;
   var y = self.rgraph.canvas.translateOffsetY * -1;
   duration = duration || 1000;
-  var rounds = (duration / 1000) * 50;
+  var rounds = (duration / 1000) * self._fps;
   var xpf = x / rounds;
   var ypf = y / rounds;
   callback = callback || function () {};
 
   var timer = setInterval(function () {
+    ++$icv._callProfile.translate; //FIXME
     self.rgraph.canvas.translate(xpf, ypf);
     if (--rounds == 0) {
       clearInterval(timer);
       timer = 0;
       return callback();
     }
-  }, 20); //25ms == 40fps, 20ms == 50fps
+  }, (1000 / self._fps)); //25ms == 40fps, 20ms == 50fps
 
 };
 
@@ -525,7 +544,7 @@ $icv.Graph.prototype.setRootNode = function (node, callback) {
 
         self.animatedCanvasTranslate(500);
         self.rgraph.onClick(node.id, {
-          hideLabels: false,
+          hideLabels: self._hideLabels,
           duration: 500,
           onComplete: function () {
             self.setBusy(false);
@@ -580,4 +599,8 @@ $icv.Graph.prototype.setHash = function (zoomId, rootId) {
   rootId = rootId || self._rootId;
 
   location.hash = '#' + zoomId + '|' + rootId;
+};
+
+$icv.Graph.prototype.hideLabels = function (hide) {
+  this._hideLabels = Boolean(hide) || false;
 };
